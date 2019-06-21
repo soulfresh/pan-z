@@ -1,0 +1,20 @@
+{
+  "plugins": [
+    "stylelint-a11y",
+    "stylelint-scss"
+  ],
+  "extends": [
+    "stylelint-config-standard"
+  ],
+  "rules": {
+    "at-rule-empty-line-before": null,
+    "value-list-comma-newline-after": null,
+    "declaration-colon-newline-after": null,
+    "selector-list-comma-newline-after": null,
+    "rule-empty-line-before": null,
+    "max-empty-lines": 2,
+    "at-rule-no-unknown": null,
+    "scss/at-rule-no-unknown": true,
+    "declaration-empty-line-before": null
+  }
+}

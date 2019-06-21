@@ -1,7 +1,10 @@
 This is the Build UI for dotFoliov3.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app)
-and [Redux Starter Kit](https://redux-starter-kit.js.org/).
+and [Redux Starter Kit](https://redux-starter-kit.js.org/). It uses
+[Karma](https://karma-runner.github.io/latest/index.html)
+with [Jasmine](https://jasmine.github.io/) for testing and
+[Storybook](https://storybook.js.org/) for component development.
 
 ## Available Scripts
 
@@ -19,6 +22,22 @@ You will also see any lint errors in the console.
 
 Launches the test runner in the interactive watch mode.<br>
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+
+### `npm test-debug`
+
+Run tests with a longer timeout in order to avoid timeout issues while stepping through code with a debugger.
+
+### `npm lint`
+
+Run ESLint and Styleing.
+
+### `npm validate`
+
+Run linting and tests locally in a manner similar to how they are run on the CI server.
+
+### `npm storybook`
+
+Run the storybook component website for browsing project components.
 
 ### `npm run build`
 

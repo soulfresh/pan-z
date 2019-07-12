@@ -1,0 +1,103 @@
+$base-font: 15 !default;
+
+$font-family-sans-serif: -apple-system, system-ui, BlinkMacSystemFont,
+  'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !default;
+$font-family-body: $font-family-sans-serif !default;
+$font-family-title: $font-family-sans-serif !default;
+$font-family-code: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+  monospace !default;
+
+$font-families: (
+  default: $font-family-sans-serif,
+  body: $font-family-body,
+  title: $font-family-title,
+  code: $font-family-code,
+) !default;
+
+$f-xxxl : 110 !default;
+$f-xxl  : 50 !default;
+$f-xl   : 24 !default;
+$f-l    : 20 !default;
+$f-m    : $base-font !default;
+$f-s    : 13 !default;
+$f-xs   : 12 !default;
+
+$font-sizes: (
+  default: $base-font,
+  xxxl: $f-xxxl,
+  xxl : $f-xxl,
+  xl  : $f-xl,
+  l   : $f-l,
+  m   : $f-m,
+  s   : $f-s,
+  xs  : $f-xs
+) !default;
+
+$f-normal : 400 !default;
+$f-medium : 500 !default;
+$f-bold   : 600 !default;
+
+$font-weights: (
+  default: $f-normal,
+  normal: $f-normal,
+  medium: $f-medium,
+  bold: $f-bold
+) !default;
+
+// Letter Spacing
+$ls-l: 0.06em;
+$ls-m: 0.04em;
+
+/*
+ * Convert a pixel value into a rem value.
+ * Do not pass the pixel unit (ie. 10px); just pass the value (ie. 10).
+ *
+ * Ex: `margin: rem(10);`
+ */
+@function rem($pixels) {
+  // If you want to debug things in pixel values, uncomment the following...
+  // @return $pixels * 1px;
+  @return ($pixels / $base-font) * 1rem;
+}
+
+/**
+ * Get one of the theme's font sizes.
+ * The available sizes are defined in `$font-sizes`.
+ *
+ * Ex: `font-size: font-size(xxl);`
+ */
+@function font-size($size: default) {
+  $s: map-get($font-sizes, $size);
+
+  @if $s == null {
+    @error('Could not find font size #{$size} on the theme provided: #{$font-sizes}');
+  }
+
+  @return rem($s);
+}
+
+/**
+ * Get one of the theme's font weights.
+ * The available weights are defined in `$font-weights`.
+ *
+ * Ex: `font-size: font-size(bold);`
+ */
+@function font-weight($weight: default) {
+  $w: map-get($font-weights, $weight);
+
+  @if $w == null {
+    @error('Could not find font weight #{$weight} on the theme provided: #{$font-weights}');
+  }
+
+  @return $w;
+}
+
+@function font-family($family: default) {
+  $f: map-get($font-families, $family);
+
+  @if $f == null {
+    @error('Could not find font family #{$family} on the theme provided: #{$font-families}');
+  }
+
+  @return $f;
+}

@@ -15,6 +15,9 @@
     "max-empty-lines": 2,
     "at-rule-no-unknown": null,
     "scss/at-rule-no-unknown": true,
-    "declaration-empty-line-before": null
+    "declaration-empty-line-before": null,
+    "color-hex-case": null,
+    "color-hex-length": null,
+    "declaration-bang-space-before": null,
   }
 }

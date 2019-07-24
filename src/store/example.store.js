@@ -1,16 +1,4 @@
-import { createAction, createSlice } from 'redux-starter-kit';
-
-export const getExampleSuccess = createAction("getExampleSuccess");
-export const getExampleFailure = createAction("getExampleFailure");
-
-export const getExample = (uuid) => async dispatch => {
-  try {
-    // TODO Do async work here...
-    dispatch(getExampleSuccess({projects: {body: {}}}));
-  } catch (error) {
-    dispatch(getExampleFailure(error));
-  }
-}
+import { createSlice, createSelector } from 'redux-starter-kit';
 
 // Simplified mechanism for creating a Reducer and its
 // associated Actions.
@@ -19,7 +7,7 @@ const ExampleSlice = createSlice({
   initialState: {
     initialized: false,
     notices: [],
-    projects: []
+    examples: []
   },
   reducers: {
     getExampleSuccess(draftState, action) {
@@ -28,7 +16,7 @@ const ExampleSlice = createSlice({
       // draft version of the state here. You MUST mutate the `draftState`
       // given to you; you CANNOT return a new state object.
       draftState.initialized = true;
-      draftState.data = action.payload.projects.body;
+      draftState.examples = action.payload;
     },
     getExampleFailure(draftState, action) {
       // console.log('getExample FAIL reducer', action);
@@ -40,24 +28,12 @@ const ExampleSlice = createSlice({
 });
 
 // Extract the action creators object and the reducer
-const { /*actions,*/ reducer } = ExampleSlice;
+const { actions, reducer } = ExampleSlice;
 
 // Extract and export each action creator by name
-// export const { actionNameHere } = actions
+export const { getExampleSuccess, getExampleFailure } = actions;
 
 // Export the reducer
 export default reducer;
 
-export const select = {
-  initialized(state) {
-    return state.initialized;
-  },
-
-  notices(state) {
-    return state.notices;
-  },
-
-  projects(state) {
-    return state.projects;
-  }
-};
+export const selectExamples = createSelector(['examples']);

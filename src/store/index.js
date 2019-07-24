@@ -1,5 +1,4 @@
-import store from './store';
-export default store;
-
+export { default } from './store';
 export * from './store';
-export * from './example.reducer';
+export * from './example.store';
+export * from './example.effects';

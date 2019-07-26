@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
-import { configureStore, createSelector, getDefaultMiddleware } from 'redux-starter-kit';
+import { configureStore, getDefaultMiddleware } from 'redux-starter-kit';
 import { createLogger } from 'redux-logger';
-import { flow } from 'lodash';
 
 import exampleReducer, { selectExamples } from './example.store';
 
@@ -40,8 +39,6 @@ export default configureStore({
   middleware: middlewares
 });
 
-const selectExampleSlice = createSelector(['example']);
-
 // Another potential option for combining selectors:
 // https://cmichel.io/redux-selectors-structure
-export const selectInputDevices = flow(selectExampleSlice, selectExamples);
+export const selectInputDevices = (state) => selectExamples(state.example);

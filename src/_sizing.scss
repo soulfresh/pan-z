@@ -31,11 +31,11 @@ $grid-breakpoints: (
   xl: 1200px
 ) !default;
 
-/**
- * Get one of standard measurements (sizes) from the theme.
- *
- * Ex: `margin: size(xxl);`
- */
+////
+// Get one of standard measurements (sizes) from the theme.
+//
+// Ex: `margin: size(xxl);`
+////
 @function size($size) {
   $s: map-get($sizes, $size);
 

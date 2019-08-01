@@ -22,6 +22,17 @@ $sizes: (
   xxxs: $s-xxxs
 ) !default;
 
+// Border radii
+$r-s: 2 !default;
+$r-m: 5 !default;
+$r-l: 12 !default;
+
+$radii: (
+  s: $r-s,
+  m: $r-m,
+  l: $r-l,
+);
+
 $grid-breakpoints: (
   default: 0,
   xs: 360px,
@@ -38,6 +49,16 @@ $grid-breakpoints: (
 ////
 @function size($size) {
   $s: map-get($sizes, $size);
+
+  @if $s == null {
+    @error('Could not find measurement/size #{$size} on the theme provided: #{$sizes}');
+  }
+
+  @return rem($s);
+}
+
+@function radius($size: m) {
+  $s: map-get($radii, $size);
 
   @if $s == null {
     @error('Could not find measurement/size #{$size} on the theme provided: #{$sizes}');

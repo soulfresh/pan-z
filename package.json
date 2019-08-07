@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "eventemitter3": "^4.0.0",
+    "hammerjs": "^2.0.8",
     "lodash": "^4.17.15",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
@@ -12,14 +14,18 @@
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
     "redux-logger": "^3.0.6",
-    "redux-starter-kit": "^0.5.1"
+    "redux-starter-kit": "^0.5.1",
+    "three.js": "^0.77.1",
+    "wheel": "^0.0.5"
   },
   "devDependencies": {
-    "@storybook/addon-actions": "^5.1.9",
-    "@storybook/addon-links": "^5.1.9",
-    "@storybook/addons": "^5.1.9",
-    "@storybook/react": "^5.1.9",
+    "@storybook/addon-actions": "^5.1.10",
+    "@storybook/addon-links": "^5.1.10",
+    "@storybook/addons": "^5.1.10",
+    "@storybook/react": "^5.1.10",
+    "@vanillaforums/eslint-config": "^1.2.2",
     "babel-loader": "^8.0.6",
+    "eslint-plugin-editorconfig": "^2.1.0",
     "eslint-plugin-jasmine": "^2.10.1",
     "jasmine-core": "^3.4.0",
     "karma": "^4.1.0",
@@ -37,7 +43,7 @@
     "stylelint-scss": "^3.8.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "yarn storybook",
     "build": "react-scripts build",
     "lint": "yarn eslint && yarn stylelint",
     "lint-fix": "yarn eslint-fix && yarn stylelint-fix",
@@ -54,7 +60,17 @@
     "build-storybook": "build-storybook -s public"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "@vanillaforums/eslint-config",
+      "plugin:editorconfig/noconflict"
+    ],
+    "plugins": [
+      "editorconfig"
+    ],
+    "rules": {
+      "no-multi-spaces": 0,
+      "curly": 0
+    }
   },
   "browserslist": {
     "production": [

@@ -8,13 +8,17 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  border: 2px solid red;
   width: 200px;
   height: 200px;
 }
 
+.test-container {
+  font-family: sans-serif;
+}
+
 .border {
   pointer-events: none;
+  border: 2px solid red;
 }
 
 .test {
@@ -25,9 +29,20 @@ body {
   overflow: visible !important;
 }
 
+.description {
+}
+
 .div-example {
   position: relative;
-  background-color: lightgray;
+  background-color: #eee;
+
+  .message {
+    position: relative;
+    margin: 0;
+    padding: 10px;
+
+    background-color: #ffffff70;
+  }
 }
 
 .box {
@@ -39,12 +54,21 @@ body {
 .red {
   top: 0;
   left: 0;
-  background-color: red;
+  background-color: lightcoral;
 }
 
 .blue {
   bottom: 0;
   right: 0;
-  background-color: blue;
+  background-color: lightblue;
   // pointer-events: none;
 }
+
+.rectangle {
+  fill: lightblue;
+}
+
+.circle {
+  fill: lightcoral;
+}
+

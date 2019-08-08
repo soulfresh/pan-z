@@ -69,6 +69,8 @@
     ],
     "rules": {
       "no-multi-spaces": 0,
+      "no-nested-ternary": 0,
+      "key-spacing": 0,
       "curly": 0
     }
   },

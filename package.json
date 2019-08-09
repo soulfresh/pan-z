@@ -1,7 +1,9 @@
 {
   "name": "builddotfolio",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "license": "MIT",
+  "repository": "https://github.com/soulfresh/pan-zoom",
   "dependencies": {
     "eventemitter3": "^4.0.0",
     "hammerjs": "^2.0.8",
@@ -61,7 +63,7 @@
   "scripts": {
     "start": "yarn storybook",
     "prebuild": "rimraf lib",
-    "build": "webpack --env production",
+    "build": "yarn prebuild && webpack --env production",
     "lint": "yarn eslint && yarn stylelint",
     "lint-fix": "yarn eslint-fix && yarn stylelint-fix",
     "stylelint": "stylelint 'src/**/*.scss'",
@@ -73,8 +75,18 @@
     "test-ci": "karma start --single-run --no-auto-watch --browsers=Chrome,Firefox",
     "validate": "yarn lint-fix && yarn test-ci",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "prepublishOnly": "yarn build"
   },
+  "files": [
+    "lib/*",
+    "src/PanZoom.js",
+    "src/Matrix.js",
+    "src/MouseWheel.js",
+    "src/index.js"
+  ],
+  "main": "lib/lib.min.js",
+  "browser": "lib/lib.min.js",
   "browserslist": {
     "production": [
       ">0.2%",

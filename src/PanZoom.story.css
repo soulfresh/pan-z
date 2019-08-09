@@ -1,3 +1,4 @@
+
 body {
   overflow: hidden;
 }
@@ -21,28 +22,32 @@ body {
   border: 2px solid red;
 }
 
+.description {
+  position: relative;
+  padding: 10px;
+  z-index: 1;
+  background-color: #ffffffcf;
+}
+
 .test {
   display: block;
   margin: 0;
-  // width: 100%;
   height: 100%;
+  z-index: -1;
   overflow: visible !important;
 }
 
-.description {
-}
-
-.div-example {
+.div-example .test {
   position: relative;
   background-color: #eee;
+}
 
-  .message {
-    position: relative;
-    margin: 0;
-    padding: 10px;
+.div-example .message {
+  position: relative;
+  margin: 0;
+  padding: 10px;
 
-    background-color: #ffffff70;
-  }
+  background-color: #ffffff70;
 }
 
 .box {
@@ -61,7 +66,6 @@ body {
   bottom: 0;
   right: 0;
   background-color: lightblue;
-  // pointer-events: none;
 }
 
 .rectangle {

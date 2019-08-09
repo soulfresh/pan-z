@@ -18,7 +18,7 @@ import MouseWheel from './MouseWheel';
  * - http://www.petercollingridge.co.uk/tutorials/svg/interactive/pan-and-zoom/
  */
 export default class PanZoom extends EventEmitter {
-  constructor(element, minZoom = 0.5, maxZoom = 3, padding = 0) {
+  constructor(element, minZoom = 1, maxZoom = 3, padding = 0) {
     super();
 
     this.element = element;
@@ -80,8 +80,8 @@ export default class PanZoom extends EventEmitter {
         left   : parts.length > 3
           ? Number(parts[3])
           : parts.length > 1
-          ? Number(parts[1])
-          : Number(parts[0]),
+            ? Number(parts[1])
+            : Number(parts[0]),
       };
     } else {
       this.padding = {
@@ -95,7 +95,10 @@ export default class PanZoom extends EventEmitter {
 
   /*
    * This must be called when you are ready to start the pan/zoom
-   * functionality. It will attach DOM event listeners.
+   * functionality. It's important that this occurs after your
+   * element layout is complete so that measurements of the DOM
+   * nodes is accurate. Calling this will also attach the necessary
+   * DOM event listeners.
    */
   init() {
     // TODO Take window scroll into account by adding window.scrollX/pageOffsetX
@@ -121,6 +124,7 @@ export default class PanZoom extends EventEmitter {
     // this.hammer.on('pinchmove', this.onPinch);
   }
 
+  // TODO Complete these.
   destroy() {}
   resize() {}
 

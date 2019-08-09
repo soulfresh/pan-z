@@ -1,6 +1,5 @@
 import EventEmitter from 'eventemitter3';
 import Hammer from 'hammerjs';
-import { Matrix4, Vector3 } from 'three';
 
 import Matrix from './Matrix';
 import MouseWheel from './MouseWheel';
@@ -259,7 +258,7 @@ export default class PanZoom extends EventEmitter {
     // Move the element top left corner to componsate for scaling.
     out.multiply(this.position);
     // Scale the element.
-    out.scale(new Vector3(zoom, zoom, 1));
+    out.scale(zoom);
     // Set the element transform.
     this.setMatrix(out);
   }
@@ -268,14 +267,14 @@ export default class PanZoom extends EventEmitter {
     // TODO If this.element is an SVG element, we need
     // to translate between SVG and Screen units.
     // Update the position by the change in x/y.
-    this.position.setPosition(new Vector3(x, y, 0));
+    this.position.setPosition(x, y);
 
     // Generate a new transform matrix.
     const out = new Matrix();
     // Add the position new position.
     out.multiply(this.position);
     // Set the current scale.
-    out.scale(new Vector3(this.scale, this.scale, 1));
+    out.scale(this.scale);
     // Set the element transform.
     this.setMatrix(out);
   }

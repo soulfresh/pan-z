@@ -107,8 +107,7 @@ export default class PanZoom extends EventEmitter {
    */
   init() {
     // TODO Take window scroll into account by adding window.scrollX/pageOffsetX
-    this.origin = this.element.getBoundingClientRect();
-    this.bounds = this.element.parentElement.getBoundingClientRect();
+    this.recalculateBounds();
 
     this.wheel = new MouseWheel();
     this.wheel.addListener('start', this.element, this.onWheelStart);
@@ -282,6 +281,28 @@ export default class PanZoom extends EventEmitter {
     return {x: percentX, y: percentY};
   }
 
+  recalculateBounds() {
+    const boundsRect = this.element.parentElement.getBoundingClientRect();
+    this.bounds = {
+      width: boundsRect.width,
+      height: boundsRect.height,
+      // x: 0,
+      // y: 0,
+    };
+
+    // TODO Take window scroll into account by adding window.scrollX/pageOffsetX
+    const elementRect = this.element.getBoundingClientRect();
+    this.origin = {
+      // width: elementRect.width,
+      // height: elementRect.height,
+      x: 0,
+      y: 0,
+    };
+
+    this.values.width = elementRect.width;
+    this.values.height = elementRect.height;
+  }
+
   _doZoom(zoom, percentX, percentY) {
     // Calculate the change in scale.
     const delta = zoom / this.transformStartValues.zoom;
@@ -360,6 +381,22 @@ export default class PanZoom extends EventEmitter {
       };
       this.emit('panchange', this.values);
     }
+  }
+
+  onResize = (e) => {
+    // Convert the old location to a percentage.
+    const percentX = (this.values.x / this.values.width);
+    const percentY = (this.values.y / this.values.height);
+
+    // Update our bounding box measurements.
+    this.recalculateBounds();
+
+    // Determine the new position which keeps our viewbox centered.
+    const newX = percentX * this.values.width;
+    const newY = percentY * this.values.height;
+    this._doPan(newX, newY);
+
+    this.emit('resize', this.values);
   }
 
   onWheelStart = (e) => {

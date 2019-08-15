@@ -71,7 +71,6 @@ export default class MouseWheel {
   // TODO Testing for all of this stuff.
   addWheelListener(element, callback) {
     this.reset();
-    // TODO Verify that callback gets called after our handler.
     Wheel.addWheelListener(element, this.onWheel);
     Wheel.addWheelListener(element, callback);
   }

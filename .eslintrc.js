@@ -23,6 +23,7 @@ module.exports = {
     allowImportExportEverywhere: true
   },
   rules: {
+    'no-debugger': 0,
     'promise/always-return': 0,
     'compat/compat': 1,
     'node/no-deprecated-api': 2,

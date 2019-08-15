@@ -361,7 +361,6 @@ export default class PanZoom extends EventEmitter {
       this.emit('panchange', this.values);
     }
   }
-  }
 
   onWheelStart = (e) => {
     e.preventDefault();

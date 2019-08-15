@@ -1,90 +1,30 @@
-This is the Build UI for dotFoliov3.
+Allows panning and zooming of any element in an HTML document. Unlike other libraries
+I've found, this one automatically locks the bounds of zooming/panning to the bounding
+box of it's parent element. This way your dragable element cannot be dragged out of view.
+This is a VanillaJS library so will work well in any project.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app)
-and [Redux Starter Kit](https://redux-starter-kit.js.org/). It uses
-[Karma](https://karma-runner.github.io/latest/index.html)
-with [Jasmine](https://jasmine.github.io/) for testing and
-[Storybook](https://storybook.js.org/) for component development.
+### Yet Another Pan Zoom Library
 
-## Available Scripts
+Yup, there are multiple other Pan/Zoom libraries out there (see below). However, I had
+trouble getting them to lock the panning bounds to the parent element bounding box.
+This Pan/Zoom implementation also utilizes CSS transforms in order to take advantage
+of browser GPU acceleration.
 
-In the project directory, you can run:
+### Some other Pan/Zoom libraries
 
-### `npm start`
+If this library doesn't fit the bill, try one of these:
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm test-debug`
-
-Run tests with a longer timeout in order to avoid timeout issues while stepping through code with a debugger.
-
-### `npm lint`
-
-Run ESLint and Styleing.
-
-### `npm validate`
-
-Run linting and tests locally in a manner similar to how they are run on the CI server.
-
-### `npm storybook`
-
-Run the storybook component website for browsing project components.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+- [dy/pan-zoom](https://github.com/dy/pan-zoom)
+  Simple library that gives you access to pan/zoom data through a callback.
+- [timmywil/panzoom](https://github.com/timmywil/panzoom)
+  Just found this one and haven't had the chance to try it out. Looks promising
+  but I can't find it on NPM.
+- [PanZoom](https://www.npmjs.com/package/panzoom)
+  A DOM/SVG Pan/Zoom library. I was unable to get this to lock to the
+  bounding box I wanted.
+- [jquery.panzoom](https://www.npmjs.com/package/jquery.panzoom)
+  A Pan/Zoom library for jQuery.
+- [React SVG Pan Zoom](https://www.npmjs.com/package/react-svg-pan-zoom)
+  A React implementation of Pan/Zoom.
+- [SVG Pan Zoom](https://www.npmjs.com/package/svg-pan-zoom)
+  An SVG Pan/Zoom library.

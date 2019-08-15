@@ -42,6 +42,33 @@ export default class MouseWheel {
     this.stopListeners.forEach((l) => l.callback(e));
   }
 
+  addListener(name, element, callback) {
+    switch(name) {
+    case 'start':
+      this.addWheelStartListener(element, callback);
+      break;
+    case 'end':
+      this.addWheelStopListener(element, callback);
+      break;
+    default:
+      this.addWheelListener(element, callback);
+    }
+  }
+
+  removeListener(name, element, callback) {
+    switch(name) {
+    case 'start':
+      this.removeWheelStartListener(element, callback);
+      break;
+    case 'end':
+      this.removeWheelStopListener(element, callback);
+      break;
+    default:
+      this.removeWheelListener(element, callback);
+    }
+  }
+
+  // TODO Testing for all of this stuff.
   addWheelListener(element, callback) {
     this.reset();
     // TODO Verify that callback gets called after our handler.
@@ -49,27 +76,34 @@ export default class MouseWheel {
     Wheel.addWheelListener(element, callback);
   }
 
-  removeWheelListener(/*element, callback*/) {}
+  removeWheelListener(element, callback) {
+    Wheel.removeWheelListener(element, this.onWheel);
+    Wheel.removeWheelListener(element, callback);
+  }
 
   addWheelStartListener(element, callback) {
-    this.startListeners = this.startListeners.filter((c) =>
-      c.element !== element || c.callback !== callback
-    );
-
+    this.removeWheelStartListener(element, callback);
     this.startListeners.push({element, callback});
   }
 
-  removeWheelStartListener(/*element, callback*/) { }
+  removeWheelStartListener(element, callback) {
+    this.startListeners = this.startListeners.filter((c) =>
+      callback
+        ? c.element !== element || c.callback !== callback
+        : c.element !== element
+    );
+  }
 
   addWheelStopListener(element, callback) {
-    this.stopListeners = this.stopListeners.filter((c) =>
-      c.element !== element || c.callback !== callback
-    );
-
+    this.removeWheelStopListener(element, callback);
     this.stopListeners.push({element, callback});
   }
 
-  removeWheelStopListener(/*element, callback*/) { }
-
-  removeAllWheelListeners(/*element*/) { }
+  removeWheelStopListener(element, callback) {
+    this.stopListeners = this.stopListeners.filter((c) =>
+      callback
+        ? c.element !== element || c.callback !== callback
+        : c.element !== element
+    );
+  }
 }

@@ -8,11 +8,6 @@ import MouseWheel from './MouseWheel';
  * A Pan/Zoom implementation that can zoom any DOM element and
  * constrains panning to the bounds of that element.
  *
- * More PanZoom Libraries:
- * - https://github.com/dy/pan-zoom
- * - https://github.com/timmywil/panzoom
- * - https://www.npmjs.com/package/jquery.panzoom
- *
  * Matrix Pan Zoom Docs/Tutorials:
  * - http://www.petercollingridge.co.uk/tutorials/svg/interactive/pan-and-zoom/
  */
@@ -26,12 +21,23 @@ export default class PanZoom extends EventEmitter {
     this.scale = 1;
     this.speed = 0.0005;
     this.position = new Matrix();
+    this.panDisabled = false;
+    this.zoomDisabled = false;
+
+    const rect = this.element.getBoundingClientRect();
+    this.values = {
+      scale: this.scale,
+      x: 0,
+      y: 0,
+      width: rect.width,
+      height: rect.height,
+    };
 
     this.setPadding(padding);
 
     this.transformStartValues = {
       percent: {x: 0, y: 0},
-      bounds: this.element.getBoundingClientRect(),
+      bounds: rect,
       zoom: this.scale,
     };
   }
@@ -104,28 +110,60 @@ export default class PanZoom extends EventEmitter {
     this.origin = this.element.getBoundingClientRect();
     this.bounds = this.element.parentElement.getBoundingClientRect();
 
-    // Wheel.addWheelListener(this.element, this.onPinch);
     this.wheel = new MouseWheel();
-    this.wheel.addWheelStartListener(this.element, this.onWheelStart);
-    this.wheel.addWheelListener(this.element, this.onPinch);
+    this.wheel.addListener('start', this.element, this.onWheelStart);
+    this.wheel.addListener('wheel', this.element, this.onPinch);
+    this.wheel.addListener('end', this.element, this.onWheelStop);
 
     this.hammer = new Hammer.Manager(this.element, {});
 
     this.hammer.add( new Hammer.Pan({ direction: Hammer.DIRECTION_ALL, threshold: 0 }) );
-    // this.hammer.add( new Hammer.Tap({ event: 'doubletap', taps: 2, posThreshold: 20 }) );
-    // this.hammer.add( new Hammer.Pinch() )
-    //   .recognizeWith(this.hammer.get('pan'));
+    this.hammer.add( new Hammer.Tap({ event: 'doubletap', taps: 2, posThreshold: 20 }) );
+    this.hammer.add( new Hammer.Pinch() )
+      .recognizeWith(this.hammer.get('pan'));
 
     this.hammer.on('panstart', this.onPanStart);
     this.hammer.on('panmove', this.onPanMove);
-    // this.hammer.on('doubletap', this.onDoubleTap);
-    // this.hammer.on('pinchstart', this.onPinchStart);
-    // this.hammer.on('pinchmove', this.onPinch);
+    this.hammer.on('panend', this.onPanEnd);
+    this.hammer.on('doubletap', this.onDoubleTap);
+    this.hammer.on('pinchstart', this.onPinchStart);
+    this.hammer.on('pinchmove', this.onPinch);
+    this.hammer.on('pinchend', this.onPinchEnd);
+
+    window.addEventListener('resize', this.onResize);
   }
 
-  // TODO Complete these.
-  destroy() {}
-  resize() {}
+  destroy() {
+    this.wheel.removeListener('start', this.element, this.onWheelStart);
+    this.wheel.removeListener('wheel', this.element, this.onPinch);
+    this.wheel.removeListener('end', this.element, this.onWheelStop);
+
+    this.hammer.off('panstart', this.onPanStart);
+    this.hammer.off('panmove', this.onPanMove);
+    this.hammer.off('panend', this.onPanEnd);
+    this.hammer.off('doubletap', this.onDoubleTap);
+    this.hammer.off('pinchstart', this.onPinchStart);
+    this.hammer.off('pinchmove', this.onPinch);
+    this.hammer.off('pinchend', this.onPinchEnd);
+
+    window.removeEventListener('resize', this.onResize);
+  }
+
+  disablePan() {
+    this.panDisabled = true;
+  }
+
+  enablePan() {
+    this.panDisabled = false;
+  }
+
+  disableZoom() {
+    this.zoomDisabled = true;
+  }
+
+  enableZoom() {
+    this.zoomDisabled = false;
+  }
 
   /*
    * Programatically set the zoom level.
@@ -222,6 +260,28 @@ export default class PanZoom extends EventEmitter {
     return {x: clampedX, y: clampedY};
   }
 
+  hasChanged(scale, x, y) {
+    return this.values.scale !== scale || this.values.x !== x || this.values.y !== y;
+  }
+
+  getEventPosition(e, rect) {
+    rect = rect ? rect : this.element.getBoundingClientRect();
+
+    let offsetX = e.offsetX;
+    let offsetY = e.offsetY;
+    if (e.target !== this.element) {
+      const rect2 = e.target.getBoundingClientRect();
+      offsetX = offsetX + (rect2.x - rect.x)/this.scale;
+      offsetY = offsetY + (rect2.y - rect.y)/this.scale;
+    }
+
+    const x = offsetX * this.scale;
+    const y = offsetY * this.scale;
+    const percentX = x / rect.width;
+    const percentY = y / rect.height;
+    return {x: percentX, y: percentY};
+  }
+
   _doZoom(zoom, percentX, percentY) {
     // Calculate the change in scale.
     const delta = zoom / this.transformStartValues.zoom;
@@ -261,6 +321,18 @@ export default class PanZoom extends EventEmitter {
     out.scale(zoom);
     // Set the element transform.
     this.setMatrix(out);
+
+    if (this.hasChanged(this.scale, p.x, p.y)) {
+      const dimensions = this.element.getBoundingClientRect();
+      this.values = {
+        scale: this.scale,
+        x: p.x,
+        y: p.y,
+        width: dimensions.width,
+        height: dimensions.height
+      };
+      this.emit('zoomchange', this.values);
+    }
   }
 
   _doPan(x, y) {
@@ -277,32 +349,46 @@ export default class PanZoom extends EventEmitter {
     out.scale(this.scale);
     // Set the element transform.
     this.setMatrix(out);
+
+    if (this.hasChanged(this.scale, x, y)) {
+      this.values = {
+        scale: this.scale,
+        x,
+        y,
+        width: this.values.width,
+        height: this.values.height
+      };
+      this.emit('panchange', this.values);
+    }
+  }
   }
 
   onWheelStart = (e) => {
+    e.preventDefault();
+
+    if (this.zoomDisabled) return false;
+
     const rect = this.element.getBoundingClientRect();
 
-    let offsetX = e.offsetX;
-    let offsetY = e.offsetY;
-    if (e.target !== this.element) {
-      const rect2 = e.target.getBoundingClientRect();
-      offsetX = offsetX + (rect2.x - rect.x)/this.scale;
-      offsetY = offsetY + (rect2.y - rect.y)/this.scale;
-    }
-
-    const x = offsetX * this.scale;
-    const y = offsetY * this.scale;
-    const percentX = x / rect.width;
-    const percentY = y / rect.height;
-
     this.transformStartValues = {
-      percent: { x: percentX, y: percentY },
+      percent: this.getEventPosition(e, rect),
       bounds: rect,
       zoom: this.scale,
     };
+
+    this.emit('zoomstart', e);
+  }
+
+  onWheelStop = (e) => {
+    if (this.zoomDisabled) return false;
+    this.emit('zoomend', e);
   }
 
   onPinch = (e) => {
+    e.preventDefault();
+
+    if (this.zoomDisabled) return false;
+
     // Determine the zoom level
     let s = this.scale + e.deltaY * this.speed;
 
@@ -312,22 +398,55 @@ export default class PanZoom extends EventEmitter {
     const percentX = this.transformStartValues.percent.x;
     const percentY = this.transformStartValues.percent.y;
     this._doZoom(s, percentX, percentY);
+
+    this.emit('zoom', e);
+  }
+
+  onPinchStart = (e) => {
+    if (this.zoomDisabled) return false;
+    this.emit('zoomstart', e.srcEvent);
+  }
+
+  onPinchEnd = (e) => {
+    if (this.zoomDisabled) return false;
+    this.emit('zoomend', e.srcEvent);
+  }
+
+  onDoubleTap = (e) => {
+    if (this.zoomDisabled) return false;
+
+    const scaleMid = this.min + ((this.max - this.min) / 2);
+    let s = this.scale > scaleMid
+      ? this.min
+      : this.max;
+
+    const rect = this.element.getBoundingClientRect();
+    const position = this.getEventPosition(e.srcEvent, rect);
+
+    this.transformStartValues = {
+      percent: position,
+      bounds: rect,
+      zoom: this.scale,
+    };
+
+    this._doZoom(s, position.x, position.y);
+    this.emit('zoom', e);
   }
 
   onPanStart = (e) => {
-    // Prevent native drag events such as image drag/drop.
-    e.srcEvent.preventDefault();
-    e.srcEvent.stopPropagation();
+    if (this.panDisabled) return false;
+
+    this.preventDefault(e.srcEvent);
 
     this.transformStartValues.bounds = this.element.getBoundingClientRect();
 
-    return false;
+    this.emit('panstart', e.srcEvent);
   }
 
   onPanMove = (e) => {
-    // Prevent native drag events such as image drag/drop.
-    e.srcEvent.preventDefault();
-    e.srcEvent.stopPropagation();
+    if (this.panDisabled) return false;
+
+    this.preventDefault(e.srcEvent);
 
     // Get the change in position.
     const deltaX = e.srcEvent.movementX;
@@ -343,6 +462,20 @@ export default class PanZoom extends EventEmitter {
     const position = this.clampPosition(m.x, m.y, b.width, b.height);
 
     this._doPan(position.x, position.y);
+
+    this.emit('pan', e.srcEvent);
+  }
+
+  onPanEnd = (e) => {
+    if (this.panDisabled) return false;
+    this.emit('panend', e);
+  }
+
+  preventDefault(e) {
+    // Prevent native image drag/drop to download.
+    if (e.target.tagName === 'IMG') {
+      e.preventDefault();
+    }
   }
 
   matrixToString(matrix) {

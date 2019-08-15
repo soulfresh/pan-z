@@ -6,6 +6,7 @@ import PanZoom from './PanZoom';
 
 import testImage from './assets/test-square-200x200.png';
 import catImage from './assets/cat.jpg';
+import floorplanImage from './assets/Harmony Lobby Seoul.jpg';
 
 function createElement(html) {
   const root = document.createElement('div');
@@ -13,11 +14,13 @@ function createElement(html) {
   return root.children[0];
 }
 
-function createTest(name, test, description) {
+function createTest(name, test, description, type = 'centered-test') {
   const html = `
     <div class="test-container ${name}">
-      ${test}
-      <div class="border"></div>
+      <div class="${type}">
+        ${test}
+        <div class="border"></div>
+      </div>
       <p class="description">
         ${description}
       </p>
@@ -29,7 +32,7 @@ function createTest(name, test, description) {
 
 function defaultDivExample() {
   const html = `
-    <div class="test" id="root">
+    <div class="test">
       <div class="box red"></div>
       <div class="box blue"></div>
       <p class="message">
@@ -45,20 +48,19 @@ function defaultDivExample() {
   `;
 
   const test = createTest('div-example', html, description);
-  const root = test.querySelector('#root');
+  const root = test.querySelector('.test');
 
   const panZoom = new PanZoom(root);
   setTimeout(() => {
     panZoom.init();
   });
 
-  console.log(test);
   return test;
 }
 
 function testImageExample() {
   const html = `
-    <img class="test" src=${testImage} alt="Cat!" id="root" />
+    <img class="test" src=${testImage} alt="Cat!" />
   `;
 
   const description = `
@@ -68,7 +70,7 @@ function testImageExample() {
   `;
 
   const test = createTest('cat-image-example', html, description);
-  const root = test.querySelector('#root');
+  const root = test.querySelector('.test');
 
   const panZoom = new PanZoom(root, 1, 2, 50);
 
@@ -79,7 +81,7 @@ function testImageExample() {
 
 function catImageExample() {
   const html = `
-    <img class="test" src=${catImage} alt="Cat!" id="root" />
+    <img class="test" src=${catImage} alt="Cat!" />
   `;
 
   const description = `
@@ -89,7 +91,7 @@ function catImageExample() {
   `;
 
   const test = createTest('test-image-example', html, description);
-  const root = test.querySelector('#root');
+  const root = test.querySelector('.test');
 
   const panZoom = new PanZoom(root, 0.5);
 
@@ -101,7 +103,7 @@ function catImageExample() {
 const svg = `
   <svg class="test" viewBox="0 0 100 100">
     <rect class="rectangle" x="0" y="0" width="100" height="100"/>
-    <circle class="circle" cx="50" cy="50" r="50" ref={this.rootRef} />
+    <circle class="circle" cx="50" cy="50" r="50" />
   </svg>
 `;
 
@@ -138,6 +140,27 @@ function svgElementExample() {
   return test;
 }
 
+function resizeExample() {
+  const html = `
+    <div class="test">
+      <img class="image" id="floorplan" src="${floorplanImage}" />
+    </div>
+  `;
+
+  const description = `
+    This example shows what happens if the zoom container is resized.
+  `;
+
+  const test = createTest('resize-example', html, description, 'fill-test');
+  const root = test.querySelector('.test');
+  const floorplan = test.querySelector('#floorplan');
+
+  const panZoom = new PanZoom(root);
+  floorplan.addEventListener('load', () => panZoom.init());
+
+  return test;
+}
+
 
 storiesOf('PanZoom', module)
   .add('Default Div', defaultDivExample)
@@ -145,4 +168,5 @@ storiesOf('PanZoom', module)
   .add('Cat Image', catImageExample)
   .add('SVG', svgExample)
   .add('SVG Element', svgElementExample)
+  .add('Resize', resizeExample)
 ;

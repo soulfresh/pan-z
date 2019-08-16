@@ -62,7 +62,8 @@
   },
   "scripts": {
     "start": "yarn storybook",
-    "prebuild": "rimraf lib",
+    "clean": "rimraf lib coverage",
+    "prebuild": "yarn clean",
     "build": "yarn prebuild && webpack --env production",
     "lint": "yarn eslint && yarn stylelint",
     "lint-fix": "yarn eslint-fix && yarn stylelint-fix",
@@ -71,7 +72,7 @@
     "eslint": "eslint 'src/**/*.js'",
     "eslint-fix": "yarn eslint --fix",
     "test": "karma start",
-    "test-debug": "karma start --log-level debug --jasmine-timeout=300000 --browsers=Firefox",
+    "test-debug": "karma start --log-level debug --jasmine-timeout=300000 --browsers=Chrome",
     "test-ci": "karma start --single-run --no-auto-watch --browsers=Chrome,Firefox",
     "validate": "yarn lint-fix && yarn test-ci",
     "storybook": "start-storybook -p 6006",

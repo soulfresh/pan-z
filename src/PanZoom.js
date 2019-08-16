@@ -110,9 +110,9 @@ export default class PanZoom extends EventEmitter {
     this.recalculateBounds();
 
     this.wheel = new MouseWheel();
-    this.wheel.addListener('start', this.element, this.onWheelStart);
-    this.wheel.addListener('wheel', this.element, this.onPinch);
-    this.wheel.addListener('end', this.element, this.onWheelStop);
+    this.wheel.addEventListener('start', this.element, this.onWheelStart);
+    this.wheel.addEventListener('wheel', this.element, this.onPinch);
+    this.wheel.addEventListener('end', this.element, this.onWheelStop);
 
     this.hammer = new Hammer.Manager(this.element, {});
 
@@ -133,9 +133,9 @@ export default class PanZoom extends EventEmitter {
   }
 
   destroy() {
-    this.wheel.removeListener('start', this.element, this.onWheelStart);
-    this.wheel.removeListener('wheel', this.element, this.onPinch);
-    this.wheel.removeListener('end', this.element, this.onWheelStop);
+    this.wheel.removeEventListener('start', this.element, this.onWheelStart);
+    this.wheel.removeEventListener('wheel', this.element, this.onPinch);
+    this.wheel.removeEventListener('end', this.element, this.onWheelStop);
 
     this.hammer.off('panstart', this.onPanStart);
     this.hammer.off('panmove', this.onPanMove);

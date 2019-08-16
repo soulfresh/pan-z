@@ -2,6 +2,19 @@ const merge = require('webpack-merge');
 
 const webpackConfig = merge([
   {
+    // cheap-module-eval-source-map
+    // not always working
+    //
+    // eval-source-map
+    // not always working
+    //
+    // source-map
+    // also not always working
+    //
+    // inline-module-source-map
+    // also not always working
+    //
+    // cheap-module-inline-source-map
     devtool: '#inline-source-map',
     mode: 'none'
   },
@@ -17,8 +30,12 @@ var timeout = timeoutArg.length > 0
 
 process.env.BABEL_ENV = 'development';
 
+const debug = process.argv.indexOf('debug') > 0;
+const reporters = ['mocha'];
+if (debug) reporters.push('coverage');
+
 module.exports = config => {
-  const src = './src/**/*.js';
+  const src = './src/testHelper.js';
   const tests = './src/**/*.spec.js';
 
   process.env.BABEL_ENV = 'karma';
@@ -31,7 +48,7 @@ module.exports = config => {
     frameworks: ['jasmine'],
 
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['mocha', 'coverage'],
+    reporters: reporters,
 
     coverageReporter: {
       dir: 'coverage',
@@ -43,20 +60,19 @@ module.exports = config => {
 
     // list of files / patterns to load in the browser
     files: [
-      src,
-      tests
+      src
     ],
 
     // list of files to exclude
     exclude: [
-      './src/**/*.story.js'
+      './src/**/*.story.js',
+      './lib'
     ],
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      [src]: ['webpack'],
-      [tests]: ['webpack', 'sourcemap']
+      [src]: ['webpack', 'sourcemap']
     },
 
     webpack: webpackConfig,

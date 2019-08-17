@@ -72,7 +72,7 @@ function testImageExample() {
   const test = createTest('cat-image-example', html, description);
   const root = test.querySelector('.test');
 
-  const panZoom = new PanZoom(root, 1, 2, 50);
+  const panZoom = new PanZoom(root, {minZoom: 1, maxZoom: 2, padding: 50});
 
   root.addEventListener('load', () => panZoom.init());
 
@@ -93,7 +93,7 @@ function catImageExample() {
   const test = createTest('test-image-example', html, description);
   const root = test.querySelector('.test');
 
-  const panZoom = new PanZoom(root, 0.5);
+  const panZoom = new PanZoom(root, {minZoom: 0.5});
 
   root.addEventListener('load', () => panZoom.init());
 
@@ -110,12 +110,13 @@ const svg = `
 function svgExample() {
   const description = `
     This example shows a zoomable &lt;SVG&gt; element.
+    Additionally, clamping is turned off.
   `;
 
   const test = createTest('svg-example', svg, description);
   const root = test.querySelector('.test');
 
-  const panZoom = new PanZoom(root);
+  const panZoom = new PanZoom(root, {clampDisabled: true});
   setTimeout(() => {
     panZoom.init();
   });

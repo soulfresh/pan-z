@@ -82,6 +82,7 @@ module.exports = config => {
       'karma-coverage',
       'karma-webpack',
       'karma-chrome-launcher',
+      'karma-firefox-launcher',
       'karma-sourcemap-loader',
       'karma-jasmine'
     ],

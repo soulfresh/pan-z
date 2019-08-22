@@ -304,8 +304,8 @@ export default class PanZoom extends EventEmitter {
     // TODO Take window scroll into account by adding window.scrollX/pageOffsetX
     const elementRect = this.element.getBoundingClientRect();
     this.origin = {
-      x: elementRect.x,
-      y: elementRect.y,
+      x: 0,
+      y: 0,
     };
 
     this.values.width = elementRect.width;
@@ -392,7 +392,7 @@ export default class PanZoom extends EventEmitter {
     }
   }
 
-  onResize = (e) => {
+  onResize = () => {
     // Convert the old location to a percentage.
     const percentX = (this.values.x / this.values.width);
     const percentY = (this.values.y / this.values.height);

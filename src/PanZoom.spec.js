@@ -300,6 +300,11 @@ fdescribe('PanZoom', function() {
       xit('should zoom in/out.');
       xit('should clamp to the zoom bounds.');
       xit('shoud notify of the new position.');
+
+      describe('and then resizing', function() {
+        xit('should still be able to zoom in/out.');
+        xit('should still be able to pan.');
+      });
     });
 
     describe('when double clicking', function() {
@@ -323,6 +328,11 @@ fdescribe('PanZoom', function() {
     describe('with zooming disabled', () => {
       xit('should still be able to pan.');
       xit('shoud notify of the new position.');
+    });
+
+    describe('after resizing', () => {
+      xit('should be able to pan.');
+      xit('should be able to zoom.');
     });
   });
 });

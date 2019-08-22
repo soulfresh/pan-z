@@ -68,7 +68,7 @@ fdescribe('PanZoom', function() {
       panzoom = new PanZoom(element, {maxZoom: 4});
       panzoom.init();
 
-      page = new PanZoomPageObject(container, element);
+      page = new PanZoomPageObject(container, element, panzoom);
     });
 
     it('should start unzoomed.', () => {
@@ -220,7 +220,7 @@ fdescribe('PanZoom', function() {
         let scale = 1;
 
         // Zoom in
-        doWheel(0, 0, [
+        page.simulateWheel(0, 0, [
           {wheel: 0.2 / panzoom.speed},
           {wheel: 0.1 / panzoom.speed},
           {wheel: 0.2 / panzoom.speed}
@@ -232,7 +232,7 @@ fdescribe('PanZoom', function() {
         expect(page.y).toEqual(0);
 
         // Zoom out
-        doWheel(50, 50, [
+        page.simulateWheel(50, 50, [
           {wheel: -0.2 / panzoom.speed},
           {wheel: -0.3 / panzoom.speed},
         ]);
@@ -244,7 +244,7 @@ fdescribe('PanZoom', function() {
         expect(page.y).toEqual(0);
 
         // Zoom in
-        doWheel(50, 50, [
+        page.simulateWheel(50, 50, [
           {wheel: 1 / panzoom.speed}
         ]);
 
@@ -257,7 +257,7 @@ fdescribe('PanZoom', function() {
 
 
         // Zoom in
-        doWheel(150, 150, [
+        page.simulateWheel(150, 150, [
           {wheel: 2 / panzoom.speed}
         ]);
 
@@ -268,7 +268,7 @@ fdescribe('PanZoom', function() {
       });
 
       it('should clamp to the zoom bounds.', () => {
-        doWheel(50, 50, [
+        page.simulateWheel(50, 50, [
           {wheel: 1 / panzoom.speed},
           {wheel: 1 / panzoom.speed},
           {wheel: 1 / panzoom.speed},
@@ -283,7 +283,7 @@ fdescribe('PanZoom', function() {
       });
 
       it('shoud notify of the new position.', () => {
-        doWheel(50, 50, [
+        page.simulateWheel(50, 50, [
           {wheel: 1 / panzoom.speed},
           {wheel: 1 / panzoom.speed},
           {wheel: 1 / panzoom.speed},

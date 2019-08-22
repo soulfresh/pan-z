@@ -4,6 +4,8 @@ import Hammer from 'hammerjs';
 import Matrix from './Matrix';
 import MouseWheel from './MouseWheel';
 
+export const DEFAULT_ZOOM_SPEED = 0.0005;
+
 /**
  * A Pan/Zoom implementation that can zoom any DOM element and
  * constrains panning to the bounds of that element.
@@ -31,7 +33,7 @@ export default class PanZoom extends EventEmitter {
     this.min = options.minZoom || 1;
     this.max = options.maxZoom || 3;
     this.scale = 1;
-    this.speed = 0.0005;
+    this.speed = DEFAULT_ZOOM_SPEED;
     this.position = new Matrix();
     this.panDisabled = options.panDisabled || false;
     this.zoomDisabled = options.zoomDisabled || false;

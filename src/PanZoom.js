@@ -40,6 +40,8 @@ export default class PanZoom extends EventEmitter {
     this.clampDisabled = options.clampDisabled || false;
 
     const rect = this.element.getBoundingClientRect();
+    // TODO include the masked dimensions?
+    // TODO add a getter for this.values
     this.values = {
       scale: this.scale,
       x: 0,

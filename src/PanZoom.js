@@ -145,6 +145,9 @@ export default class PanZoom extends EventEmitter {
     this.hammer.on('pinchend', this.onPinchEnd);
 
     window.addEventListener('resize', this.onResize);
+
+    // Emit the initial dimensions.
+    this.emit('resize', this.values);
   }
 
   destroy() {

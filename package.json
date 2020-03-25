@@ -67,7 +67,7 @@
     "build": "yarn prebuild && webpack --env production",
     "lint": "yarn eslint && yarn stylelint",
     "lint-fix": "yarn eslint-fix && yarn stylelint-fix",
-    "stylelint": "stylelint 'src/**/*.scss'",
+    "stylelint": "stylelint 'src/**/*.css'",
     "stylelint-fix": "yarn stylelint --fix",
     "eslint": "eslint 'src/**/*.js'",
     "eslint-fix": "yarn eslint --fix",

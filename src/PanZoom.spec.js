@@ -1,7 +1,7 @@
 import PanZoom from './PanZoom';
 import PanZoomPageObject from './PanZoom.page-object';
 
-fdescribe('PanZoom', function() {
+describe('PanZoom', function() {
   let panzoom, element, container, page, initialWidth, initialHeight;
 
   let makeMoveEvent = (x, y) => ({
@@ -15,26 +15,10 @@ fdescribe('PanZoom', function() {
 
   let doPan = (moves) => {
     panzoom.onPanStart(makeMoveEvent(0, 0));
-    moves.forEach((m, i) =>
+    moves.forEach(m =>
       panzoom.onPanMove(makeMoveEvent(m.x, m.y))
     );
     panzoom.onPanEnd(makeMoveEvent(0, 0));
-  };
-
-  let makeWheelEvent = (x, y, wheel) => ({
-    offsetX: x,
-    offsetY: y,
-    deltaY: wheel,
-    preventDefault: () => false,
-    target: element,
-  });
-
-  let doWheel = (x, y, moves) => {
-    panzoom.onWheelStart(makeWheelEvent(x, y, 0));
-    moves.forEach((m, i) =>
-      panzoom.onPinch(makeWheelEvent(x, y, m.wheel))
-    );
-    panzoom.onWheelStop(makeWheelEvent(x, y, 0));
   };
 
   beforeEach(function() {
@@ -162,7 +146,6 @@ fdescribe('PanZoom', function() {
     });
 
     describe('when panning with the mouse', () => {
-      let startEvent, updateEvent, endEvent;
       let startListener, moveListener, endListener;
 
       beforeEach(() => {
@@ -203,7 +186,6 @@ fdescribe('PanZoom', function() {
     });
 
     describe('when using the mouse wheel', function() {
-      let startEvent, updateEvent, endEvent;
       let startListener, moveListener, endListener;
 
       beforeEach(() => {
@@ -217,8 +199,6 @@ fdescribe('PanZoom', function() {
       });
 
       it('should zoom in/out.', () => {
-        let scale = 1;
-
         // Zoom in
         page.simulateWheel(0, 0, [
           {wheel: 0.2 / panzoom.speed},

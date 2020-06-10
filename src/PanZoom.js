@@ -301,17 +301,18 @@ export default class PanZoom extends EventEmitter {
   }
 
   recalculateBounds() {
-    const boundsRect = this.element.parentElement.getBoundingClientRect();
+    const parent = this.element.parentElement;
+    const boundsRect = parent.getBoundingClientRect();
     this.bounds = {
       width: boundsRect.width,
       height: boundsRect.height,
     };
 
-    // TODO Take window scroll into account by adding window.scrollX/pageOffsetX
-    const elementRect = this.element.getBoundingClientRect();
+    // TODO Take window scroll into account by adding window.scrollX/pageOffsetX?
+    const elementRect = boundsRect;
     this.origin = {
-      x: 0,
-      y: 0,
+      x: elementRect.x,
+      y: elementRect.y,
     };
 
     this.values.width = elementRect.width;
@@ -335,6 +336,7 @@ export default class PanZoom extends EventEmitter {
     // The current position relative to the origin.
     const currentX = (this.origin.x - rect.x) * -1;
     const currentY = (this.origin.y - rect.y) * -1;
+
     // Difference in dimensions as a result of this.scale.
     const diffW = ((rect.width  * delta) - rect.width);
     const diffH = ((rect.height * delta) - rect.height);
@@ -345,6 +347,10 @@ export default class PanZoom extends EventEmitter {
     const w = rect.width + diffW;
     const h = rect.height + diffH;
 
+    // TODO Instead of clamping while we zoom, we should complete the zoom
+    // and them animate into the clamped positions once the zoom interaction
+    // is complete. For programatic zooming/panning, we should just let the
+    // user decide when to clamp.
     const p = this.clampPosition(x, y, w, h);
 
     // Reset the pan position to the position we just calculated.

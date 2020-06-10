@@ -121,6 +121,7 @@ export default class PanZoom extends EventEmitter {
    * DOM event listeners.
    */
   init() {
+    // TODO Make sure calling this multiple times doesn't add the same listeners multiple times.
     // TODO Take window scroll into account by adding window.scrollX/pageOffsetX
     this.recalculateBounds();
 

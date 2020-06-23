@@ -122,7 +122,6 @@ export default class PanZoom extends EventEmitter {
    */
   init() {
     // TODO Make sure calling this multiple times doesn't add the same listeners multiple times.
-    // TODO Take window scroll into account by adding window.scrollX/pageOffsetX
     this.recalculateBounds();
 
     this.wheel = new MouseWheel();
@@ -145,6 +144,7 @@ export default class PanZoom extends EventEmitter {
     this.hammer.on('pinchmove', this.onPinch);
     this.hammer.on('pinchend', this.onPinchEnd);
 
+    // TODO Use ResizeObserver to watch the parent element size instead.
     window.addEventListener('resize', this.onResize);
 
     // Emit the initial dimensions.
@@ -194,6 +194,7 @@ export default class PanZoom extends EventEmitter {
    *   zoom (between 0-1).
    */
   zoom(zoom, percentX, percentY) {
+    this.recalculateBounds();
     this.transformStartValues.zoom = this.scale;
     this.transformStartValues.bounds = this.element.getBoundingClientRect();
 
@@ -208,6 +209,7 @@ export default class PanZoom extends EventEmitter {
    *   clampPosition if you want clamping).
    */
   pan(x, y) {
+    this.recalculateBounds();
     this.transformStartValues.bounds = this.element.getBoundingClientRect();
     this._doPan(x, y);
   }
@@ -216,6 +218,7 @@ export default class PanZoom extends EventEmitter {
    * Center the element within it's parent's bounds.
    */
   center() {
+    this.recalculateBounds();
     const rect = this.element.getBoundingClientRect();
     const x = ((rect.width - this.bounds.width) / 2) * -1;
     const y = ((rect.height - this.bounds.height) / 2) * -1;
@@ -308,15 +311,14 @@ export default class PanZoom extends EventEmitter {
       height: boundsRect.height,
     };
 
-    // TODO Take window scroll into account by adding window.scrollX/pageOffsetX?
-    const elementRect = boundsRect;
+    // TODO The scroll part isn't working.
     this.origin = {
-      x: elementRect.x,
-      y: elementRect.y,
+      x: boundsRect.x, // + window.scrollX,
+      y: boundsRect.y, // + window.scrollY,
     };
 
-    this.values.width = elementRect.width;
-    this.values.height = elementRect.height;
+    this.values.width = boundsRect.width;
+    this.values.height = boundsRect.height;
   }
 
   _doZoom(zoom, percentX, percentY) {
@@ -425,6 +427,9 @@ export default class PanZoom extends EventEmitter {
 
     if (this.zoomDisabled) return false;
 
+    // Update our bounding box measurements.
+    this.recalculateBounds();
+
     const rect = this.element.getBoundingClientRect();
 
     this.transformStartValues = {
@@ -461,6 +466,10 @@ export default class PanZoom extends EventEmitter {
 
   onPinchStart = (e) => {
     if (this.zoomDisabled) return false;
+
+    // Update our bounding box measurements.
+    this.recalculateBounds();
+
     this.emit('zoomstart', e.srcEvent);
   }
 
@@ -471,6 +480,9 @@ export default class PanZoom extends EventEmitter {
 
   onDoubleTap = (e) => {
     if (this.zoomDisabled) return false;
+
+    // Update our bounding box measurements.
+    this.recalculateBounds();
 
     const scaleMid = this.min + ((this.max - this.min) / 2);
     let s = this.scale > scaleMid
@@ -492,6 +504,9 @@ export default class PanZoom extends EventEmitter {
 
   onPanStart = (e) => {
     if (this.panDisabled) return false;
+
+    // Update our bounding box measurements.
+    this.recalculateBounds();
 
     this.preventDefault(e.srcEvent);
 

@@ -59,6 +59,22 @@ body {
   height: 200px;
 }
 
+.tall-test {
+  /* overflow: auto; */
+  position: relative;
+  height: 200px;
+}
+
+.tall-test .border,
+.tall-test .test-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+}
+
 .description {
   position: relative;
   margin-top: auto;
@@ -128,5 +144,9 @@ body {
   margin: 0;
   object-fit: contain;
   width: 100%;
+}
+
+.tall-container {
+  height: 500px;
 }
 

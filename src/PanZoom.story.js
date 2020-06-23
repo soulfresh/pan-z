@@ -162,6 +162,28 @@ function resizeExample() {
   return test;
 }
 
+function scrollExample() {
+  const html = `
+    <div class="test-wrapper">
+      <img class="test" src=${testImage} alt="Cat!" />
+    </div>
+  `;
+
+  const description = `
+    This example shows what happens is a zoomable element is placed
+    inside of a container that scrolls.
+  `;
+
+  const test = createTest('scroll-example', html, description, 'tall-test');
+  const root = test.querySelector('.test');
+
+  const panZoom = new PanZoom(root, {minZoom: 1, maxZoom: 2, padding: 50});
+
+  root.addEventListener('load', () => panZoom.init());
+
+  return test;
+}
+
 
 storiesOf('PanZoom', module)
   .add('Default Div', defaultDivExample)
@@ -170,4 +192,5 @@ storiesOf('PanZoom', module)
   .add('SVG', svgExample)
   .add('SVG Element', svgElementExample)
   .add('Resize', resizeExample)
+  .add('Scroll', scrollExample)
 ;

@@ -8,6 +8,7 @@
     "eventemitter3": "^4.0.0",
     "hammerjs": "^2.0.8",
     "lodash": "^4.17.15",
+    "pan-zoom": "^3.5.0",
     "three.js": "^0.77.1",
     "wheel": "^0.0.5"
   },

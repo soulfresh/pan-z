@@ -105,3 +105,4 @@ module.exports = env => (
     ? [libraryMinConfig, libraryConfig]
     : libraryConfig
 );
+

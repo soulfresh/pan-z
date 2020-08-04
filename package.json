@@ -24,6 +24,7 @@
     "@storybook/addons": "^5.3.19",
     "@storybook/cli": "^5.3.19",
     "@storybook/react": "^5.3.19",
+    "@storybook/storybook-deployer": "^2.8.6",
     "babel-eslint": "^9.0.0",
     "babel-loader": "^8.1.0",
     "babel-plugin-add-module-exports": "^1.0.0",
@@ -86,6 +87,7 @@
     "validate": "yarn lint-fix && yarn test-ci",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
+    "deploy-storybook": "storybook-to-ghpages",
     "prepublishOnly": "yarn build"
   },
   "files": [

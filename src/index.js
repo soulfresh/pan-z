@@ -1,1 +1,1 @@
-export { default } from './PanZoom2';
+export { default } from './PanZ';

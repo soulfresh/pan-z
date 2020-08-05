@@ -14,7 +14,7 @@ module.exports = api => {
       [
         '@babel/preset-env',
         {
-          modules: false,
+          modules: 'umd',
           targets: {
             browsers: [
               '> 1%',

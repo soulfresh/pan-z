@@ -1,6 +1,6 @@
 {
   "name": "@thesoulfresh/pan-z",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": false,
   "license": "MIT",
   "repository": "https://github.com/soulfresh/pan-zoom",
@@ -93,7 +93,7 @@
     "build-storybook": "yarn clean && build-storybook",
     "deploy-storybook": "storybook-to-ghpages",
     "prepublishOnly": "yarn build",
-    "publish-package": "npm publish --access public"
+    "publish-package": "./scripts/release"
   },
   "files": [
     "lib/*",

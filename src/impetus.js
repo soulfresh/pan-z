@@ -1,6 +1,6 @@
 
-var EventEmitter = require('eventemitter3');
-var hasPassive = require('has-passive-events');
+import EventEmitter from 'eventemitter3';
+import hasPassive from 'has-passive-events';
 
 var eventOptions = hasPassive
   ? { capture: false, passive: true }

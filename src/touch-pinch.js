@@ -1,14 +1,18 @@
-var getDistance = require('gl-vec2/distance');
-var EventEmitter = require('eventemitter3');
-var dprop = require('dprop');
-var eventOffset = require('mouse-event-offset');
-var hasPassive = require('has-passive-events');
+// var getDistance = require('gl-vec2/distance');
+// var EventEmitter = require('eventemitter3');
+// var dprop = require('dprop');
+// var eventOffset = require('mouse-event-offset');
+// var hasPassive = require('has-passive-events');
+import getDistance from 'gl-vec2/distance';
+import EventEmitter from 'eventemitter3';
+import dprop from 'dprop';
+import eventOffset from 'mouse-event-offset';
+import hasPassive from 'has-passive-events';
 
 var eventOptions = hasPassive
   ? { capture: false, passive: true }
   : false;
 
-module.exports = touchPinch;
 function touchPinch (target) {
   target = target || window;
 
@@ -156,3 +160,5 @@ function Finger () {
   this.position = [0, 0];
   this.touch = null;
 }
+
+export default touchPinch;

@@ -7440,7 +7440,7 @@ github-slugger@^1.0.0:
   dependencies:
     emoji-regex ">=6.0.0 <=6.1.1"
 
-gl-vec2@^1.0.0, gl-vec2@^1.3.0:
+gl-vec2@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/gl-vec2/-/gl-vec2-1.3.0.tgz#83d472ed46034de8e09cbc857123fb6c81c51199"
   integrity sha512-YiqaAuNsheWmUV0Sa8k94kBB0D6RWjwZztyO+trEYS8KzJ6OQB/4686gdrf59wld4hHFIvaxynO3nRxpk1Ij/A==
@@ -8192,11 +8192,6 @@ immer@1.10.0:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/immer/-/immer-1.10.0.tgz#bad67605ba9c810275d91e1c2a47d4582e98286d"
   integrity sha512-O3sR1/opvCDGLEVcvrGTMtLac8GJ5IwZC4puPrLuRj3l7ICKvkmA0vGuU9OW8mV9WIBRnaxp5GJh9IEAaNOoYg==
-
-impetus@^0.8.8:
-  version "0.8.8"
-  resolved "https://registry.yarnpkg.com/impetus/-/impetus-0.8.8.tgz#8848c56ac8ccdd375fa541bfe62533c3cc472050"
-  integrity sha512-7ejVjFxRAiBlnZQbdNGzUGgxMvLjVke/QNP2TFN/VK8baASsuRiE8YuSbD0qyiU8Pae+w95De4ZYz+rxSo5FJw==
 
 import-cwd@^2.0.0:
   version "2.1.0"
@@ -11389,18 +11384,6 @@ pako@~1.0.5:
   resolved "https://registry.yarnpkg.com/pako/-/pako-1.0.10.tgz#4328badb5086a426aa90f541977d4955da5c9732"
   integrity sha512-0DTvPVU3ed8+HNXOu5Bs+o//Mbdj9VNQMUOe9oKCwh8l0GNwpTDMKCWbRjgtD291AWnkAgkqA/LOnQS8AmS1tw==
 
-pan-zoom@^3.5.0:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/pan-zoom/-/pan-zoom-3.5.0.tgz#0b80b4aa6b46a49e15135c0193ee13cc5fcdf85e"
-  integrity sha512-nF+jzm5PpKwt3vH9pb10HlM6TU0gNsbHRLGnVS6r/JO4xpVTaKeDnNpOJVCwqLXEhymQF619rSfFbrNTycIyPw==
-  dependencies:
-    has-passive-events "^1.0.0"
-    impetus "^0.8.8"
-    mouse-wheel "^1.2.0"
-    raf "^3.4.0"
-    touch-pinch "^1.0.1"
-    touch-position "^2.0.0"
-
 parallel-transform@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/parallel-transform/-/parallel-transform-1.1.0.tgz#d410f065b05da23081fcd10f28854c29bda33b06"
@@ -12349,7 +12332,7 @@ quick-lru@^1.0.0:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-1.1.0.tgz#4360b17c61136ad38078397ff11416e186dcfbb8"
   integrity sha1-Q2CxfGETatOAeDl/8RQW4Ybc+7g=
 
-raf@^3.4.0, raf@^3.4.1:
+raf@^3.4.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/raf/-/raf-3.4.1.tgz#0742e99a4a6552f445d73e3ee0328af0ff1ede39"
   integrity sha512-Sq4CW4QhwOHE8ucn6J34MqtZCeWFP2aQSmrlroYgqAV1PjStIhJXxYuTgUIfkEk7zTLjmIjLmU5q+fbD1NnOJA==
@@ -12461,7 +12444,7 @@ react-docgen@^5.0.0:
     node-dir "^0.1.10"
     strip-indent "^3.0.0"
 
-react-dom@^16.8.3:
+react-dom@^16.13.1, react-dom@^16.8.3:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.13.1.tgz#c1bd37331a0486c078ee54c4740720993b2e0e7f"
   integrity sha512-81PIMmVLnCNLO/fFOQxdQkvEq/+Hfpv24XNJfpyZhTRfO0QcmQIF/PgCa1zCOj2w1hrn12MFLyaJ/G0+Mxtfag==
@@ -14738,16 +14721,6 @@ toposort@^1.0.0:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/toposort/-/toposort-1.0.7.tgz#2e68442d9f64ec720b8cc89e6443ac6caa950029"
   integrity sha1-LmhELZ9k7HILjMieZEOsbKqVACk=
-
-touch-pinch@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/touch-pinch/-/touch-pinch-1.0.1.tgz#52f2aeee263139730570d0ccdf8d443a92b3b36d"
-  integrity sha1-UvKu7iYxOXMFcNDM341EOpKzs20=
-  dependencies:
-    dprop "^1.0.0"
-    events "^1.0.2"
-    gl-vec2 "^1.0.0"
-    mouse-event-offset "^3.0.2"
 
 touch-position@^2.0.0:
   version "2.0.0"

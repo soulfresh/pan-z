@@ -3,18 +3,15 @@
  *
  * Events for pan and zoom
  */
-'use strict';
 
 
-var Impetus = require('./impetus');
-var wheel = require('mouse-wheel');
-var touchPinch = require('./touch-pinch');
-var position = require('touch-position');
-var raf = require('raf');
-var debounce = require('lodash.debounce');
-var doubleTap = require('./double-tap');
-
-module.exports = panZoom;
+import Impetus from './impetus';
+import wheel from 'mouse-wheel';
+import touchPinch from './touch-pinch';
+import position from 'touch-position';
+import raf from 'raf';
+import debounce from 'lodash.debounce';
+import doubleTap from './double-tap';
 
 function panZoom (target, cb, options) {
   if (target instanceof Function) {
@@ -412,3 +409,5 @@ function panZoom (target, cb, options) {
   return unpanzoom;
 }
 
+
+export default panZoom;

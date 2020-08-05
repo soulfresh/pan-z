@@ -94,7 +94,7 @@
     "build-storybook": "yarn clean && build-storybook",
     "deploy-storybook": "storybook-to-ghpages",
     "prepublishOnly": "yarn build",
-    "publish-package": "./scripts/release"
+    "release": "./scripts/release"
   },
   "files": [
     "lib/*",

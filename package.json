@@ -76,7 +76,7 @@
   },
   "scripts": {
     "start": "yarn storybook",
-    "clean": "rimraf lib coverage",
+    "clean": "rimraf lib coverage storybook-static",
     "prebuild": "yarn clean",
     "build": "yarn prebuild && webpack --env production",
     "lint": "yarn eslint && yarn stylelint",
@@ -90,7 +90,7 @@
     "test-ci": "karma start --single-run --no-auto-watch --browsers=Chrome,Firefox",
     "validate": "yarn lint-fix && yarn test-ci",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
+    "build-storybook": "yarn clean && build-storybook",
     "deploy-storybook": "storybook-to-ghpages",
     "prepublishOnly": "yarn build"
   },

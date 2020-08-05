@@ -92,7 +92,8 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "yarn clean && build-storybook",
     "deploy-storybook": "storybook-to-ghpages",
-    "prepublishOnly": "yarn build"
+    "prepublishOnly": "yarn build",
+    "publish-package": "npm publish --access public"
   },
   "files": [
     "lib/*",

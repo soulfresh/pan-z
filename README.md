@@ -1,7 +1,7 @@
 
 # A Pan/Zoom library
 
-[Docs and demo](https://soulfresh.github.io/pan-zoom)
+[docs + demos](https://soulfresh.github.io/pan-zoom)
 
 ## Install
 

@@ -12,6 +12,7 @@
 ## Usage
 
 
+```js
     import PanZ from '@thesoulfresh/pan-z'
 
     // Attach pan/zoom functionality to an HTML element.
@@ -19,4 +20,4 @@
 
     // Remove pan/zoom functionality
     pz.destroy();
-
+```

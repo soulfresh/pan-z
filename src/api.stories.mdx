@@ -1,0 +1,395 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { action } from '@storybook/addon-actions';
+import {
+  Example,
+  Box,
+  Viewport,
+  LargeContainer,
+  LargeContainerWithCenter,
+  randomElement,
+  useRandomIndex,
+} from './docs';
+
+import PanZ from './PanZ';
+
+<Meta title="Pan-Z" />
+
+# PanZ
+
+/ˈpanzē/
+
+Yes, PanZ is another pan zoom library. Why? While there are a
+bunch of other libraries out there, none of them worked exactly as
+I needed.
+
+- No additional dependencies to install
+- GPU accelerated transformations through CSS
+- Pinch gestures (mobile and trackpad) along with mouse wheel
+- Kinetic motion
+- Double click to zoom in/out
+- Bounds locking
+- API for positioning and zooming
+- Works with HTML and SVG
+
+<Preview>
+  <Story name="Pan-Z">
+    <Example>{ () => {
+      const [pz] = React.useState(() => new PanZ());
+      const elementRef = React.useRef();
+      //
+      React.useEffect(() => {
+        if (elementRef.current) {
+          pz.init(elementRef.current);
+          pz.on('start', action('start'));
+          pz.on('end', action('end'));
+          return () => {
+            pz.destroy();
+          }
+        }
+      }, []);
+      //
+      return (
+        <Viewport>
+          <Box ref={elementRef} />
+        </Viewport>
+      );
+    }}</Example>
+  </Story>
+</Preview>
+
+## Install
+
+```
+npm install @soulfresh/pan-z
+```
+
+## Usage
+
+```js
+// Make a PanZ instance
+const pz = new PanZ();
+
+// Start the pan/zoom functionality on the element specified.
+pz.init( someHTMLElement );
+
+// Optionally, you can do things like...
+// Center the element within it's parent.
+pz.center();
+
+// Listen to the end of pan/zoom gestures.
+pz.on('end', ({x, y, scale}) => console.log('position:', x, y, scale));
+
+// When you're done, you should...
+pz.destroy();
+```
+
+## API
+
+#### `PanZ([options], [element], [fit])`
+Create a new PanZ instance.
+
+```js
+const pz = new PanZ(options, element);
+```
+
+- *__options__ {object}* A config object with the following properties:
+  - *__minZoom__ {number|null}* __0.3__<br/>
+    The minimum scale allowed. A float as accepted
+    by the css `scale()` function. Set this to `null` to turn off
+    min zoom bounds clamping.
+  - *__maxZoom__ {number|null}* __4__<br/>
+    The maximum scale allowed. A float as accepted
+    by the css `scale()` function. Set this to `null` to turn off
+    max zoom bounds clamping.
+  - *__zoomSpeed__ {number}* __1__<br/>
+    An integer used to factor the speed of zoom.
+    Pass an number greater than 1 to speed up zooming and less
+    than 1 to slow it down.
+  - *__zoomEnabled__ {boolean}* __true__<br/>
+    Set this to false to turn off zoom functionality.
+    You can also call `pz.disableZoom()` as needed to do the same.
+  - *__panEnabled__ {boolean}* __true__<br/>
+    Set this to false to turn off pan functionality.
+    You can also call `pz.disablePan()` as needed to do the same.
+  - *__bounds__ {number}* __0.8__<br/>
+    When 0 = pan and zoom events will not be clamped. Pass a
+    number greater than 0 to clamp movement within the bounding element
+    rect (as a percentage of the element width/height).
+  - *__boundingElement__ {HTMLElement}* __null__<br/>
+    The element to use as the bounding client rect for bounds clamping
+    (if the bounding option is set). If not specified, the element
+    being pan/zoomed will be used as the bounding element.
+  - *__initialFit__ {string}* __center|contain|cover__
+    The initial position and size of the element.
+- *__element__ {HTMLElement}* The element you want to pan/zoom.
+  If passed here, pan/zoom functionality will be initialized
+  immediately. If you don't construct PanZ with an element,
+  then pan/zoom functionality will be initialized once you
+  call `pz.init()`.
+
+> __NOTE__ PanZ modifies the `transform-origin` and `transform`
+> properties of the HTML element it controls. If you have custom transforms
+> you need to apply, you should place them on the parent or child
+> of the PanZ element.
+
+
+#### `PanZ.init(element, [options])`
+
+Initialize (start) the pan/zoom functionality with the given element.
+You can call init multiple times with different elenents to change
+the element being panned. Doing so will destroy all listeners on
+the previous element and then attach listeners to the new element.
+
+If you passed an element in the constructor, then calling
+`init` is unnecessary unless you are re-initializing pan/zoom
+on a different element.
+
+```js
+const pz = new PanZ();
+
+// You can pass options either through the constructor or to init.
+pz.init(element, options);
+```
+
+
+- *__element__ {HTMLElement}* The element to pan/zoom.
+- *__options__ {object}* The same options object as the constructor.
+
+
+#### `PanZ.destroy()`
+Remove all listeners from the attached element. If needed, you
+can reuse a destroyed PanZ instance by calling `init` again.
+
+
+#### `PanZ.position`
+You can get the current pan position and zoom level of the element
+at any time, using the `position` property. It returns an object
+with x/y/z properties (z = scale).
+
+
+#### `PanZ.disable()`
+Disable pan/zoom on the configured element.
+
+
+#### `PanZ.enable()`
+Re-enable pan/zoom on the configured element.
+
+
+#### `PanZ.disablePan()`
+Disable pan functionality but keep zoom functionality active.
+
+
+#### `PanZ.enablePan()`
+Re-enable pan functionality.
+
+
+#### `PanZ.disableZoom()`
+Disable zoom functionality but keep pan functionality active.
+
+
+#### `PanZ.enableZoom()`
+Re-enable zoom functionality.
+
+
+#### `PanZ.enabled`
+Whether or not either panning or zooming is enabled.
+
+
+#### `PanZ.panEnabled`
+Whether panning is enabled.
+
+
+#### `PanZ.zoomEnabled`
+Whether zooming is enabled.
+
+
+#### `PanZ.on(event, callback)`
+Listen to one of the following events:
+
+- __start__ Called when a pan or zoom gesture begins.
+- __update__ Called on each update of a pan or zoom gesture.
+- __end__ Called when a pan or zoom gesture ends.
+
+All events are called with the following parameters:
+- *__x__ {number}* The x translation of the element
+- *__y__ {number}* The y translation of the element
+- *__scale__ {number}* The scale of the element
+- *__width__ {number}* The __scaled__ width of the element
+- *__height__ {number}* The __scaled__ height of the element
+- *__unscaledWidth__ {number}* The __unscaled__ width of the element
+- *__unscaledHeight__ {number}* The __unscaled__ height of the element
+
+
+#### `PanZ.off(event, callback)`
+Remove a previously registered event listener. Calling the destroy
+method, will remove your listeners for you.
+
+
+#### `PanZ.removeAllListeners()`
+Remove all of your listeners from all events. Calling the destroy
+method will do this for you automatically.
+
+
+#### `PanZ.reset()`
+Reset the element to its original position (ie. `transform(0, 0) scale(1)`).
+
+
+#### `PanZ.center()`
+Center the element within the `boundingElement` without changing the zoom level.
+
+
+#### `PanZ.cover()`
+Similar to [CSS object-fit: cover](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit),
+it will size and center the element so it fully covers the bounding element.
+
+
+#### `PanZ.contain()`
+Similar to [CSS object-fit: contain](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit),
+it will size and center the element so it takes as much space as possible
+without clipping.
+
+
+#### `PanZ.scaleDown()`
+Similar to [CSS object-fit: contain](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit),
+it will size and center the element so it takes as much space as possible
+without clipping and without setting a scale value larger than 1.
+
+
+#### `PanZ.getContainSize([element], [boundingElement])`
+Get the dimensions that are necessary to contain element within boundingElement.
+This method is exposed as a convenience and can be used for things such as determining
+a good `minZoom` value based on the natural dimensions of the element.
+
+- *__element__ {HTMLElement}* The element to contain within `boundingElement`.
+  If not passed, then the element that was used to initialize PanZ is used (this
+  will only work if PanZ has been initialized).
+- *__boundingElement__ {HTMLElement}* The bounding element to contain `element`.
+  If not passed, then the bounding element used to initialize PanZ or the element
+  itself is used. This only works if PanZ has already been initialized.
+
+Returns:
+- *__dimensions__ {object}* The dimension to contain element withing boundingElement.
+  - *__scale__ {number}* The scale value that would contain element.
+  - *__width__ {number}* The width value that would contain element.
+  - *__height__ {number}* The height value that would contain element.
+  - *__x__ {number}* The x position that would center the element.
+  - *__y__ {number}* The y position that would center the element.
+
+```js
+const pz = new PanZ();
+
+// Determine the scale used to contain element within bounds
+const {scale} = pz.getContainSize(element, element.parentNode);
+
+// Initialize PanZ with a `minZoom` equal to the contain size
+pz.init(element, {
+  minZoom: scale,
+  boundingElement: element.parentNode,
+});
+```
+
+#### `PanZ.getCoverSize([element], [boundingElement])`
+Similar to `getContainSize` but using `cover` sizing.
+
+#### `PanZ.getScaleDownSize([element], [boundingElement])`
+Similar to `getContainSize` but using `scale-down` sizing.
+
+#### `PanZ.panBy(deltaX, deltaY, [clamp])`
+Pan the element from it's current position by some number of pixels.
+
+- *__deltaX__ {number}* Horizontal pixels to move by.
+- *__deltaY__ {number}* Vertical pixels to move by.
+- *__clamp__ {boolean}* Whether or not to honor bounds clamping.
+
+
+#### `PanZ.zoomBy(deltaScale, centerX, centerY, [clamp])`
+Zoom the elment from it's current zoom around a center point.
+
+- *__deltaScale__ {number}* Scale to add/subtract from the current scale. For example,
+  `zoomBy(1)` would double the size of the element from it's current scale.
+- *__centerX__ {number}* The center x position around which to perform zooming
+  as a percentage (0 - 1) of the element width.
+- *__centerY__ {number}* The center y position around which to perform zooming
+  as a percentage (0 - 1) of the element height.
+- *__clamp__ {boolean}* Whether or not to honor bounds clamping.
+
+
+#### `PanZ.centerOn(x, y, [z], [clamp], [animate])`
+Center on a specific point while also setting the scale.
+
+- *__x__ {number}* __0.5__
+  The x center point of scaling as a percentage of the element being panned.
+- *__y__ {number}* __0.5__
+  The y center point of scaling as a percentage of the element being panned.
+- *__scale__ {number}*
+  The new scale to set. This is an absolute scale value so 1 = no scaling
+  and 0.5 = half the original size. If not specified, this method works
+  the same as `panTo`.
+- *__clamp__ {boolean}*
+  Whether or not to honor bounds clamping.
+- *__animate__ {boolean}*
+  Whether or not to animate into the new position.
+
+
+#### `PanZ.panTo(x, y, [clamp], [animate])`
+Pan to a specific point on the element without changing the scale.
+The x/y location specified will be
+centered within the `boundingElement`. X/Y should be specified as a number
+between 0-1 that is the percentage of the dimensions of the element.
+
+- *__x__ {number}* __0.5__
+  The x location to center on.
+- *__y__ {number}* __0.5__
+  The y location to center on.
+- *__clamp__ {boolean}* __true__
+  Whether or not to honor bounds clamping.
+- *__animate__ {boolean}* __true__
+  Whether or not to animate into the new position.
+
+```js
+// Pan to the center of the element
+pz.panTo(0.5, 0.5);
+
+// Pan to the bottom right of the element
+pz.panTo(1, 1);
+```
+
+#### `PanZ.zoomTo(scale, [x], [y], [clamp])`
+Set the scale of the element without changing the panning.
+
+- *__scale__ {number}*
+  The new scale to set. This is an absolute scale value so 1 = no scaling
+  and 0.5 = half the original size.
+- *__x__ {number}* __0.5__
+  The x center point of scaling as a percentage of the element.
+- *__y__ {number}* __0.5__
+  The y center point of scaling as a percentage of the element.
+- *__clamp__ {boolean}*
+  Whether or not to honor bounds clamping.
+- *__animate__ {boolean}*
+  Whether or not to animate into the new position.
+
+
+#### `PanZ.zoomToArea(top, left, bottom, right, [clamp])`
+Coming Soon...
+
+
+## Some other Pan/Zoom libraries
+
+If this library doesn't fit the bill, try one of these:
+
+- [dy/pan-zoom](https://github.com/dy/pan-zoom)
+  Simple library that gives you access to pan/zoom data through a callback.
+- [timmywil/panzoom](https://github.com/timmywil/panzoom)
+  Just found this one and haven't had the chance to try it out. Looks promising
+  but I can't find it on NPM.
+- [PanZoom](https://www.npmjs.com/package/panzoom)
+  A DOM/SVG Pan/Zoom library. I was unable to get this to lock to the
+  bounding box I wanted.
+- [jquery.panzoom](https://www.npmjs.com/package/jquery.panzoom)
+  A Pan/Zoom library for jQuery.
+- [React SVG Pan Zoom](https://www.npmjs.com/package/react-svg-pan-zoom)
+  A React implementation of Pan/Zoom.
+- [SVG Pan Zoom](https://www.npmjs.com/package/svg-pan-zoom)
+  An SVG Pan/Zoom library.
+

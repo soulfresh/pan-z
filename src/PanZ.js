@@ -102,6 +102,7 @@ export default class PanZ extends Base {
     this._resizeObserver.observe(this.boundingElement);
 
     this.info('initialized with', arguments);
+    this.debug('settings:', this);
 
     if (this.initialFit === 'center') this.center(false, true);
     else if (this.initialFit === 'contain') this.contain(false, true);

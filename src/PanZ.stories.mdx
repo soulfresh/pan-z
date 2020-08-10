@@ -6,16 +6,430 @@ import {
   Viewport,
   LargeContainer,
   LargeContainerWithCenter,
+  Image,
+  Div,
   randomElement,
   useRandomIndex,
 } from './docs';
 
 import PanZ from './PanZ';
 
+import catImage from './assets/cat.jpg';
+import { ReactComponent as PansySVG } from './assets/pansy-2.svg';
+
 <Meta title="Examples" />
+
+## Examples
 
 > __NOTE__ The following examples use React for demonstration purposes
 > but PanZ is not dependent on React.
+
+Any pan/zoom functionality is highly dependent on the styling of elements
+being manipulated. For example, replaced elements (like images and SVGs)
+may not behave exactly as you anticipate depending on the styling you apply to them.
+Below, are some examples of how PanZ works in different situations.
+
+If you have issues getting elements to pan/zoom the way you expect, a good first debugging
+step is to turn off PanZ and style the target element with a border. This will
+show you the bounding box of the target element. This bounding box is what PanZ
+will use to determine the area that should be dragged and what a scale of 1 means.
+
+> The red border in the examples that follow indicates the element being pan/zoomed
+> while the green border represents the bounding element.
+
+### Inline Image
+
+This example shows what happens if you attach PanZ to a standard image element. In this
+example, PanZ is not configured with a specific bounding element, so it uses the image's original
+positioning and dimensions as its bounds.
+
+By default, images are inline elements so you will notice whitespace (line-height) under the element
+and it will be aligned based on the `text-align` of the parent element. Additionally,
+you'll want to turn off the browser's standard image drag and drop functionality by
+adding a `draggable="false"` attribute to the image (useful on SVGs as well).
+
+Depending on the situation, it can also be helpful to add `user-select: none;` to the
+pan/zoom element if you have text inside your element that should not be selectable.
+
+<Preview>
+  <Story name="Inline Image Example">
+    <Example>{ () => {
+      const [pz] = React.useState(() => new PanZ({bounds: 1}, null, true));
+      const elementRef = React.useRef();
+      //
+      React.useEffect(() => {
+        if (elementRef.current) {
+          pz.init(elementRef.current);
+          return () => {
+            pz.destroy();
+          }
+        }
+      }, []);
+      //
+      return (
+        <div style={{
+          margin: '20px',
+        }}>
+          <Image
+            draggable="false"
+            ref={elementRef}
+            src={catImage}
+            style={{
+              border: '2px solid red',
+            }}
+          />
+        </div>
+      );
+    }}</Example>
+  </Story>
+</Preview>
+
+### Block Image
+
+In the next example, we've updated the element to display `block` and specified a
+bounding element. This removes the unnecessary whitespade below the image and allows
+you to drop the image anywhere within the green box while also maintaining the bounds
+clamping of the bounding element.
+
+<Preview>
+  <Story name="Block Image Example">
+    <Example>{ () => {
+      const [pz] = React.useState(() => new PanZ({bounds: 1}));
+      const elementRef = React.useRef();
+      const boundingRef = React.useRef();
+      //
+      React.useEffect(() => {
+        if (elementRef.current && boundingRef.current) {
+          pz.init(elementRef.current, {boundingElement: boundingRef.current});
+          return () => {
+            pz.destroy();
+          }
+        }
+      }, []);
+      //
+      return (
+        <Div
+          ref={boundingRef}
+          style={{
+            border: '2px dashed green',
+            margin: '20px',
+          }}
+        >
+          <Image
+            draggable="false"
+            ref={elementRef}
+            src={catImage}
+            style={{
+              display: 'block',
+              border: '2px solid red',
+            }}
+          />
+        </Div>
+      );
+    }}</Example>
+  </Story>
+</Preview>
+
+### `object-fit` Image
+
+In this example, the bounding element is a flex container and the image has
+`object-fit: contain` styling applied. Notice that
+the red border of the image now completely fills the bounding element. This results
+in the image background being draggable and changes the bounds used to calculate
+the draggable bonding area.
+
+<Preview>
+  <Story name="Object Fit Image Example">
+    <Example>{ () => {
+      const [pz] = React.useState(() => new PanZ({bounds: 1}));
+      const elementRef = React.useRef();
+      const boundingRef = React.useRef();
+      //
+      React.useEffect(() => {
+        if (elementRef.current) {
+          pz.init(elementRef.current, {boundingElement: boundingRef.current});
+          return () => {
+            pz.destroy();
+          }
+        }
+      }, []);
+      //
+      return (
+        <Div
+          ref={boundingRef}
+          style={{
+            border: '2px dashed green',
+            margin: '20px',
+            display: 'flex',
+          }}
+        >
+          <Image
+            draggable="false"
+            ref={elementRef}
+            src={catImage}
+            style={{
+              flex: 1,
+              display: 'block',
+              objectFit: 'contain',
+              border: '2px solid red',
+            }}
+          />
+        </Div>
+      );
+    }}</Example>
+  </Story>
+</Preview>
+
+### Inline SVG Image
+
+This example shows pan/zoom with SVG elements react. Similar to `<img>` elements,
+SVGs are inline by default so you will notice extra whitespace (line-height) under the element.
+Unlike `<img>` elements, SVGs will fill the width of parent element if no width
+is specified and you can use the `preserveAspectRatio` property to define
+how they scale and clip their contents.
+
+Similar to `<img>` elements, you will want to set `draggable="false"`
+on the SVG element to prevent the native image drag functionality. If
+your SVG contains text, you'll also want to set `user-select: none` CSS
+style to prevent text selection.
+
+<Preview>
+  <Story name="Inline SVG Example">
+    <Example>{ () => {
+      const [pz] = React.useState(() => new PanZ({bounds: 1}));
+      const elementRef = React.useRef();
+      const boundingRef = React.useRef();
+      //
+      React.useEffect(() => {
+        if (elementRef.current) {
+          pz.init(elementRef.current, {boundingElement: boundingRef.current});
+          return () => {
+            pz.destroy();
+          }
+        }
+      }, []);
+      //
+      return (
+        <Div
+          ref={boundingRef}
+          style={{
+            border: '2px dashed green',
+            margin: '20px',
+            maxWidth: '300px',
+          }}
+        >
+          <svg
+            draggable="false"
+            ref={elementRef}
+            style={{
+              border: '2px solid red',
+            }}
+            viewBox="0 0 100 100"
+            preserveAspectRatio="xMidYMid"
+          >
+            <circle cx="50" cy="50" r="50" fill="pink" />
+          </svg>
+        </Div>
+      );
+    }}</Example>
+  </Story>
+</Preview>
+
+### Block SVG Image
+
+In this example, we've updated the SVG element to a block element to remove
+the whitespace under it. The SVG `width` and `height` are explicitly set
+to `100%` to show how this impacts the drag bounds. The width and height settings
+of the SVG and of its parent have a large impact on SVG layout so you may need
+to fiddle with them to get SVGs displaying the way you want.
+
+<Preview>
+  <Story name="Block SVG Example">
+    <Example>{ () => {
+      const [pz] = React.useState(() => new PanZ({bounds: 1}));
+      const elementRef = React.useRef();
+      const boundingRef = React.useRef();
+      //
+      React.useEffect(() => {
+        if (elementRef.current) {
+          pz.init(elementRef.current, {boundingElement: boundingRef.current});
+          return () => {
+            pz.destroy();
+          }
+        }
+      }, []);
+      //
+      return (
+        <Div
+          ref={boundingRef}
+          style={{
+            border: '2px dashed green',
+            margin: '20px',
+            height: '300px',
+          }}
+        >
+          <svg
+            draggable="false"
+            ref={elementRef}
+            style={{
+              display: 'block',
+              border: '2px solid red',
+            }}
+            width="100%"
+            height="100%"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="xMidYMid"
+          >
+            <circle cx="50" cy="50" r="50" fill="pink" />
+          </svg>
+        </Div>
+      );
+    }}</Example>
+  </Story>
+</Preview>
+
+### SVG Content Example
+
+In this example, PanZ is applied to an item inside of the SVG element.
+
+> TODO Fix pan calculation based on SVG scaling.
+
+<Preview>
+  <Story name="SVG Content Example">
+    <Example>{ () => {
+      const [pz] = React.useState(() => new PanZ({bounds: 1}));
+      const elementRef = React.useRef();
+      const boundingRef = React.useRef();
+      //
+      React.useEffect(() => {
+        if (elementRef.current) {
+          pz.init(elementRef.current, {boundingElement: boundingRef.current});
+          return () => {
+            pz.destroy();
+          }
+        }
+      }, []);
+      //
+      return (
+        <Div
+          ref={boundingRef}
+          style={{
+            border: '2px dashed green',
+            margin: '20px',
+            height: '300px',
+          }}
+        >
+          <svg
+            draggable="false"
+            style={{
+              display: 'block',
+              border: '2px solid red',
+            }}
+            width="100%"
+            height="100%"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="xMidYMid"
+          >
+            <circle cx="50" cy="50" r="50" fill="pink" ref={elementRef} />
+          </svg>
+        </Div>
+      );
+    }}</Example>
+  </Story>
+</Preview>
+
+### Absolute SVG Example
+
+To get the SVG to size to match it's `viewBox`, I've found setting
+`height: 100%; max-height: 100%` and no width a good option.
+
+<Preview>
+  <Story name="Absolute SVG Example">
+    <Example>{ () => {
+      const [pz] = React.useState(() => new PanZ({bounds: 1}));
+      const elementRef = React.useRef();
+      const boundingRef = React.useRef();
+      //
+      React.useEffect(() => {
+        if (elementRef.current) {
+          pz.init(elementRef.current, {boundingElement: boundingRef.current});
+          return () => pz.destroy();
+        }
+      }, []);
+      //
+      return (
+        <Div
+          ref={boundingRef}
+          style={{
+            border: '2px dashed green',
+            margin: '20px',
+            height: '300px',
+          }}
+        >
+          <svg
+            draggable="false"
+            ref={elementRef}
+            style={{
+              display: 'block',
+              border: '2px solid red',
+              height: '100%',
+              maxHeight: '100%',
+            }}
+            viewBox="0 0 100 100"
+            preserveAspectRatio="xMidYMid"
+          >
+            <circle cx="50" cy="50" r="50" fill="pink" />
+          </svg>
+        </Div>
+      );
+    }}</Example>
+  </Story>
+</Preview>
+
+### Standard HTML Example
+
+Any HTML element can be pannable/zoomable, as in this example.
+
+<Preview>
+  <Story name="HTML Example">
+    <Example>{ () => {
+      const [pz] = React.useState(() => new PanZ({bounds: 1}));
+      const elementRef = React.useRef();
+      const boundingRef = React.useRef();
+      //
+      React.useEffect(() => {
+        if (elementRef.current) {
+          pz.init(elementRef.current, {boundingElement: boundingRef.current});
+          return () => pz.destroy();
+        }
+      }, []);
+      //
+      return (
+        <Div
+          ref={boundingRef}
+          style={{
+            border: '2px dashed green',
+            margin: '20px',
+            height: '300px',
+          }}
+        >
+          <Div
+            draggable="false"
+            ref={elementRef}
+            style={{
+              border: '2px solid red',
+              maxWidth: '200px',
+            }}
+            viewBox="0 0 100 100"
+            preserveAspectRatio="xMidYMid"
+          >
+            This is a standard "div" with text inside.
+          </Div>
+        </Div>
+      );
+    }}</Example>
+  </Story>
+</Preview>
 
 ### With boundingElement
 This example shows how you can use the `boundingElement` option to specify

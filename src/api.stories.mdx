@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 import { action } from '@storybook/addon-actions';
 import {
   Example,
@@ -6,6 +6,8 @@ import {
   Viewport,
   LargeContainer,
   LargeContainerWithCenter,
+  Image,
+  Div,
   randomElement,
   useRandomIndex,
 } from './docs';
@@ -34,15 +36,19 @@ I needed.
 <Preview>
   <Story name="Pan-Z">
     <Example>{ () => {
+      // Create an PanZ instance
       const [pz] = React.useState(() => new PanZ());
-      const elementRef = React.useRef();
+      const elementRef = React.useRef(); // The element being manipulated.
       //
       React.useEffect(() => {
         if (elementRef.current) {
+          // Start pan/zooming when ready.
           pz.init(elementRef.current);
+          // Listen to pan/zoom events.
           pz.on('start', action('start'));
           pz.on('end', action('end'));
           return () => {
+            // Destroy the pan/zoom object when finished.
             pz.destroy();
           }
         }
@@ -56,6 +62,13 @@ I needed.
     }}</Example>
   </Story>
 </Preview>
+
+
+## Table of Contents
+- __[Usage](#usage)__
+- __[API](#api)__
+- __[Other Libraries](#other-libraries)__
+<br/><br/>
 
 ## Install
 
@@ -82,6 +95,19 @@ pz.on('end', ({x, y, scale}) => console.log('position:', x, y, scale));
 // When you're done, you should...
 pz.destroy();
 ```
+
+### DOM setup
+
+PanZ uses the bounding box of the target element to determine the pannable/zoomable
+area and what a scale of 1 means. Setting a border on the target element while
+first introducing PanZ can be helpful in understanding what PanZ is doing.
+
+Additionally, you may find it easiest to `absolute` position the target element
+inside of a `relative` parent and then call one of the
+positioning functions (`center`, `contain` or `cover`) to position the element
+where you want it.
+
+For more details, see the [Examples](./?path=/docs/examples--inline-image-example).
 
 ## API
 
@@ -374,7 +400,7 @@ Set the scale of the element without changing the panning.
 Coming Soon...
 
 
-## Some other Pan/Zoom libraries
+## Other libraries
 
 If this library doesn't fit the bill, try one of these:
 

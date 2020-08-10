@@ -163,4 +163,11 @@ export const LargeContainerWithCenter = React.forwardRef(({
   );
 });
 
-
+// No idea why React is throwing a forwardRef exception when
+// trying to use an img tab with a ref inside an Example component.
+export const Image = React.forwardRef((props, ref) =>
+  <img {...props} ref={ref} />
+);
+export const Div = React.forwardRef(({children, ...rest}, ref) =>
+  <div {...rest} ref={ref}>{ children }</div>
+);

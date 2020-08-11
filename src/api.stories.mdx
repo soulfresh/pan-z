@@ -25,6 +25,7 @@ bunch of other libraries out there, none of them worked exactly as
 I needed.
 
 - No additional dependencies to install
+- Framework agnostic
 - GPU accelerated transformations through CSS
 - Pinch gestures (mobile and trackpad) along with mouse wheel
 - Kinetic motion
@@ -180,6 +181,11 @@ pz.init(element, options);
 
 - *__element__ {HTMLElement}* The element to pan/zoom.
 - *__options__ {object}* The same options object as the constructor.
+
+
+#### `PanZ.initialized`
+
+Whether or not the PanZ instance has previously been initialized.
 
 
 #### `PanZ.destroy()`

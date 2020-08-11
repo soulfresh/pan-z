@@ -107,6 +107,8 @@ export default class PanZ extends Base {
     if (this.initialFit === 'center') this.center(false, true);
     else if (this.initialFit === 'contain') this.contain(false, true);
     else if (this.initialFit === 'cover') this.cover(false, true);
+
+    this._initialized = true;
   }
 
   destroy() {
@@ -123,6 +125,7 @@ export default class PanZ extends Base {
       // Clean up DOM references
       this.element = null;
       this.boundingElement = null;
+      this._initialized = false;
 
       this.info('destroyed');
     }
@@ -152,6 +155,10 @@ export default class PanZ extends Base {
       this.unpz();
       this.unpz = null;
     }
+  }
+
+  get initialized() {
+    return this._initialized;
   }
 
   get enabled() {

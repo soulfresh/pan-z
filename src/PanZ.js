@@ -1,4 +1,3 @@
-// import pz from 'pan-zoom';
 import pz from './pan-zoom-lib';
 import EventEmitter from 'eventemitter3';
 import debounce from 'lodash.debounce';

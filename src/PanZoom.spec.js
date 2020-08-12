@@ -1,6 +1,8 @@
-import PanZoom from './PanZoom';
+import PanZoom from './PanZ.js';
 import PanZoomPageObject from './PanZoom.page-object';
 
+// TODO This file was created to test the PanZoom.js file but
+// needs to be converted to work with PanZ.
 describe('PanZoom', function() {
   let panzoom, element, container, page, initialWidth, initialHeight;
 

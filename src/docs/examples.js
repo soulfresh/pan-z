@@ -52,7 +52,6 @@ export const Box = React.forwardRef(({
     style={{
       display: 'block',
       margin: 0,
-      height: '100%',
       overflow: 'visible',
       backgroundColor: '#eee',
       width: px(width),

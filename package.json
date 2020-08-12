@@ -90,7 +90,7 @@
     "test": "karma start",
     "test-debug": "karma start --log-level debug --jasmine-timeout=300000 --browsers=Chrome",
     "test-ci": "karma start --single-run --no-auto-watch --browsers=Chrome,Firefox",
-    "validate": "yarn lint-fix && yarn test-ci",
+    "validate": "yarn lint-fix",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "yarn clean && build-storybook",
     "deploy-storybook": "storybook-to-ghpages",

@@ -57,9 +57,9 @@ export default class PanZ extends Base {
     this.boundingType = 0;
 
     this.onResize = debounce(this.onResize.bind(this), 300);
-    this.onStart = this.onStart.bind(this);
-    this.onChange = this.onChange.bind(this);
-    this.onEnd = this.onEnd.bind(this);
+    this.onGestureStart = this.onGestureStart.bind(this);
+    this.onGestureChange = this.onGestureChange.bind(this);
+    this.onGestureEnd = this.onGestureEnd.bind(this);
     this.onDoubleClick = this.onDoubleClick.bind(this);
 
     this.bounds = bounds;
@@ -136,10 +136,10 @@ export default class PanZ extends Base {
       // TODO Configure pan friction and clamp animation to match zoomSpeed
       this.unpz = new pz(
         this.element,
-        this.onChange,
+        this.onGestureChange,
         {
-          onStart: this.onStart,
-          onEnd: this.onEnd,
+          onStart: this.onGestureStart,
+          onEnd: this.onGestureEnd,
           onDoubleTap: this.onDoubleClick,
         }
       );
@@ -238,10 +238,12 @@ export default class PanZ extends Base {
   }
 
   reset(clamp, animated) {
+    this._emitState('start');
     this._setState(0, 0, 1, clamp, animated);
   }
 
   center(animated, immediate) {
+    this._emitState('start');
     const t = this._percentToTranslation(0.5, 0.5);
     this._setState(t.x, t.y, this._z, false, animated, immediate);
   }
@@ -259,17 +261,20 @@ export default class PanZ extends Base {
   }
 
   panTo(px, py, clamp, animated) {
+    this._emitState('start');
     const t = this._percentToTranslation(px, py);
     this._setState(t.x, t.y, this._z, clamp, animated);
   }
 
   zoomTo(z = 1, cpx = 0.5, cpy = 0.5, clamp, animated) {
+    this._emitState('start');
     const nz = this._scaleToScaleDelta(z);
     // TODO Use _setState instead?
     this.zoomBy(nz, cpx, cpy, clamp, animated);
   }
 
   centerOn(px = 0.5, py = 0.5, z = this._z, clamp, animated) {
+    this._emitState('start');
     const t = this._percentToTranslation(px, py);
 
     // const dz = this._scaleToScaleDelta(z);
@@ -283,6 +288,7 @@ export default class PanZ extends Base {
   }
 
   zoomToArea(/*top, left, bottom, right, clamp = !!this.bounds*/) {
+    // this._emitState('start');
     // parameters should be a percentage?
   }
 
@@ -347,19 +353,23 @@ export default class PanZ extends Base {
     //   'element', this.element,
     //   'bounding element', this.boundingElement,
     // );
+    this._emitState('start');
     this._setState(x, y, z, clamp, animated, immediate);
   }
 
-  onStart() {
+  onGestureStart() {
+    // These events will contain the values before any changes.
     this._emitState('start');
+    this._emitState('gesturestart');
   }
 
-  onEnd() {
+  onGestureEnd() {
     this._clampStateAfterTransition();
     this._emitState('end');
+    this._emitState('gestureend');
   }
 
-  onChange({
+  onGestureChange({
     dx = 0, // Change in x position (when panning only)
     dy = 0, // Change in y position (when panning only)
     dz = 0, // Change in scale (when mouse or touch zooming only)
@@ -539,6 +549,10 @@ export default class PanZ extends Base {
     this._cancelRAF();
     this._cancelTransitions();
 
+    // immediate mode is only used during initialFit to ensure
+    // that the target element doesn't jump on screen. This will
+    // also bypass event emission because it should be transparent
+    // to users of this library.
     if (immediate) {
       this._setTransform(this._x, this._y, this._z);
     } else {

@@ -31,5 +31,5 @@ export function useRandomIndex(list) {
     const i = randomIndex(list, index);
     setIndex(i);
     return i;
-  }
+  };
 }

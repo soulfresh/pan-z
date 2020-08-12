@@ -732,8 +732,7 @@ This example shows a log of start/change/end events.
       const addEvent = (name, e) =>
         setEvents(curr => curr.concat([{...e, name}]) );
       const resetEvents = (name, e) =>
-        addEvent(name, e);
-        //setEvents([{...e, name}]);
+        setEvents([{...e, name}]);
       //
       const elementRef = React.useRef();
       const boundingRef = React.useRef();
@@ -745,17 +744,6 @@ This example shows a log of start/change/end events.
           pz.on('update', e => addEvent('change', e));
           pz.on('end',    e => addEvent('end', e));
           return () => pz.destroy();
-        }
-      }, []);
-      //
-      const [log] = React.useState(() => console.log);
-      React.useEffect(() => {
-        console.log = (...args) => {
-          addEvent('log', {message: args.join(' ')});
-        }
-        //
-        return () => {
-          console.log = log;
         }
       }, []);
       //
@@ -773,8 +761,8 @@ This example shows a log of start/change/end events.
               if (i === 0) acc.push({...curr, count: 1});
               else {
                 const last = acc[acc.length - 1];
-                //if (last.name !== curr.name) acc.push({...curr, count: 1});
-                //else last.count += 1;
+                if (last.name !== curr.name) acc.push({...curr, count: 1});
+                else last.count += 1;
                 acc.push({...curr, count: 1});
               }
               return acc;

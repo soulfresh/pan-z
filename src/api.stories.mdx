@@ -238,11 +238,20 @@ Whether zooming is enabled.
 #### `PanZ.on(event, callback)`
 Listen to one of the following events:
 
-- __start__ Called when a pan or zoom gesture begins.
-- __update__ Called on each update of a pan or zoom gesture.
-- __end__ Called when a pan or zoom gesture ends.
+- __start__
+  Emitted when the target element's pan or zoom value starts changing as
+  a result of a user gesture or an API call.
+- __gesturestart__
+  Emitted when the user starts a pan or zoom gesture.
+- __update__
+  Emitted on each update of a pan or zoom gesture.
+- __end__
+  Emitted when the target element's pan or zoom value stops changing
+  as a result of either a user gesture or an API call.
+- __gestureend__
+  Emitted when the user's last pan or zoom gesture ends.
 
-All events are called with the following parameters:
+All events are emitted with the following parameters:
 - *__x__ {number}* The x translation of the element
 - *__y__ {number}* The y translation of the element
 - *__scale__ {number}* The scale of the element

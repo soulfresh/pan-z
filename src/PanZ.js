@@ -54,6 +54,7 @@ export default class PanZ extends Base {
     this._cx = 0;
     this._cy = 0;
     this.boundingType = 0;
+    this._moving = false;
 
     this.onResize = debounce(this.onResize.bind(this), 300);
     this.onGestureStart = this.onGestureStart.bind(this);
@@ -143,6 +144,8 @@ export default class PanZ extends Base {
         }
       );
 
+      this._moving = false;
+
       // TODO Verify this
       if (!this._panEnabled) this.disablePan();
       if (!this._zoomEnabled) this.disagleZoom();
@@ -153,7 +156,12 @@ export default class PanZ extends Base {
     if (this.unpz) {
       this.unpz();
       this.unpz = null;
+      this._moving = false;
     }
+  }
+
+  get moving() {
+    return this._moving;
   }
 
   get initialized() {
@@ -221,6 +229,11 @@ export default class PanZ extends Base {
   disablePan() {
     this._panEnabled = false;
     this.unpz.disablePan();
+    // Disabling pan-zoom will stop all events an we will
+    // nolonger recieve the gesture end event, so we need
+    // to clean up the moving state here.
+    this._moving = false;
+
     this.info('pan disabled');
   }
 
@@ -233,6 +246,11 @@ export default class PanZ extends Base {
   disableZoom() {
     this._zoomEnabled = false;
     this.unpz.disableZoom();
+    // Disabling pan-zoom will stop all events an we will
+    // nolonger recieve the gesture end event, so we need
+    // to clean up the moving state here.
+    this._moving = false;
+
     this.info('zoom disabled');
   }
 
@@ -357,12 +375,14 @@ export default class PanZ extends Base {
   }
 
   onGestureStart() {
+    this._moving = true;
     // These events will contain the values before any changes.
     this._emitState('start');
     this._emitState('gesturestart');
   }
 
   onGestureEnd() {
+    this._moving = false;
     this._clampStateAfterTransition();
     this._emitState('end');
     this._emitState('gestureend');
@@ -534,6 +554,10 @@ export default class PanZ extends Base {
    * It will also emit an update event.
    */
   update(x, y, z, clamp = true, immediate = false) {
+    // If not in immediate mode, ensure moving is set
+    // until the requestAnimationFrame is called.
+    if (!immediate) this._moving = true;
+
     if (clamp) {
       const result = this._clampPanZoom(x, y, z);
       this._x = result.x;
@@ -559,6 +583,7 @@ export default class PanZ extends Base {
       this.rafId = requestAnimationFrame(() => {
         this._setTransform(this._x, this._y, this._z);
         this.rafId = null;
+        this._moving = false;
         this._emitState('update');
       });
     }
@@ -828,11 +853,17 @@ export default class PanZ extends Base {
     const originalTransition = this.element.style.transition;
 
     // If the element doesn't have a transform transition, then add our own.
+    // TODO This will never emit a transition end
     if (!/transform /.test(originalTransition)) {
       // Handle the transition end event.
       const onTransitionEnd = () => {
         this._cancelTransitions();
         this._emitState('update');
+
+        // Always set moving to false here because clamping may not
+        // produce another transition. If it does, it will just set
+        // moving back to true and then false again after the transition.
+        this._moving = false;
 
         if (clamp) {
           this._clampStateAfterTransition();
@@ -848,6 +879,7 @@ export default class PanZ extends Base {
         this._cancelTransitionEndListener = null;
       };
 
+      this._moving = true;
       this.element.addEventListener('transitionend', onTransitionEnd);
       this.element.style.transition = 'transform 300ms cubic-bezier(0.785, 0.135, 0.150, 0.860)';
     }

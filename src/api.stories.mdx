@@ -199,6 +199,19 @@ at any time, using the `position` property. It returns an object
 with x/y/z properties (z = scale).
 
 
+#### `PanZ.moving`
+You can determine if the pan or zoom state is being manipulated at any point
+in time using the `moving` property. This can be useful if you want
+to disable panning when hovered over specific within the
+pan/zoom target (ex. a map pin) but only if the target isn't currently
+being manipulated.
+
+```js
+mapPin.addEventListener('mouseover', () => {
+  if (!panz.moving) panz.disablePan();
+});
+```
+
 #### `PanZ.disable()`
 Disable pan/zoom on the configured element.
 

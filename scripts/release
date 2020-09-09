@@ -9,23 +9,25 @@ trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 
 if output=$(git status --porcelain) && [ -z "$output" ]; then
   echo '\nChecking out the master branch...'
+  echo '-----------------------------------'
   git checkout master
   git pull
   echo '\nValidating project...'
+  echo '-----------------------'
   yarn validate
   yarn config set version-tag-prefix "release/"
   yarn config set version-git-message "[release][ci skip] prepare release/%s"
-  yarn version
-  version=$(node -e "console.log(require('./package.json').version)")
-  echo '\nPushing release tag...'
-  git push origin master
-  git push origin "release/$version"
   echo '\nDeploying Storybook...'
+  echo '------------------------'
   yarn deploy-storybook
   echo '\nReady To Publish:'
+  echo '-------------------'
   yarn publish
-  # The publish command fails for some reason when running in this script
-  echo 'Run the following command: npm publish --access public'
+  echo '\nPushing release tag...'
+  echo '------------------------'
+  git push origin master
+  git push origin "release/$version"
+  echo '\nDONE'
 else
   echo 'uncommitted files. Please commit all files first.'
   exit 1

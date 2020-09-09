@@ -23,6 +23,7 @@ if output=$(git status --porcelain) && [ -z "$output" ]; then
   echo '\nDeploying Storybook...'
   yarn deploy-storybook
   echo '\nReady To Publish:'
+  yarn publish
   # The publish command fails for some reason when running in this script
   echo 'Run the following command: npm publish --access public'
 else

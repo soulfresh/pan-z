@@ -15,8 +15,6 @@ if output=$(git status --porcelain) && [ -z "$output" ]; then
   echo '\nValidating project...'
   echo '-----------------------'
   yarn validate
-  yarn config set version-tag-prefix "release/"
-  yarn config set version-git-message "[release][ci skip] prepare release/%s"
   echo '\nDeploying Storybook...'
   echo '------------------------'
   yarn deploy-storybook
@@ -25,6 +23,8 @@ if output=$(git status --porcelain) && [ -z "$output" ]; then
   yarn publish
   echo '\nPushing release tag...'
   echo '------------------------'
+  yarn config set version-tag-prefix "release/"
+  yarn config set version-git-message "[release][ci skip] prepare release/%s"
   git push origin master
   git push origin "release/$version"
   echo '\nDONE'

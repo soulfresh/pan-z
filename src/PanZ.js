@@ -1,4 +1,4 @@
-import pz from './pan-zoom-lib';
+import pz from '@thesoulfresh/pan-zoom';
 import EventEmitter from 'eventemitter3';
 import debounce from 'lodash.debounce';
 import { fitAndPosition } from 'object-fit-math';

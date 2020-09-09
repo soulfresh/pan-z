@@ -20,6 +20,9 @@
     "src/PanZ.js",
     "src/index.js"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "start": "yarn storybook",
     "clean": "rimraf lib coverage storybook-static",

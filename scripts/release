@@ -31,7 +31,6 @@ if output=$(git status --porcelain) && [ -z "$output" ]; then
   echo '\nReady To Publish:'
   echo '-------------------'
   yarn publish --new-version $version
-  echo '\nDONE'
 else
   echo 'uncommitted files. Please commit all files first.'
   exit 1

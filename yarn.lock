@@ -2187,10 +2187,10 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
-"@thesoulfresh/pan-zoom@^4.0.0":
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/@thesoulfresh/pan-zoom/-/pan-zoom-4.1.2.tgz#462013bb16a08ec3d41af577a97491d5c3edd6c0"
-  integrity sha512-j8vQIJUw1nfNp65CKWLM0LVrIp5NZhwT/+bS4Ii3yOl2OLPMS8t/OX8C1o7M5Vy676KxwjefggntGZERjOypBA==
+"@thesoulfresh/pan-zoom@^4.1.3":
+  version "4.1.3"
+  resolved "https://registry.yarnpkg.com/@thesoulfresh/pan-zoom/-/pan-zoom-4.1.3.tgz#82dd81e64d100df4790f716d72cd04611c9f8c97"
+  integrity sha512-rJ3B1qKxXCTgkL0+bngyTpdERgE2Pe0PiZRii/2qyNb/gGTT5xY8T5ZSgpSL/Ebh1Ek7LDnAImWcK7/lGtynSw==
   dependencies:
     dprop "^1.0.0"
     gl-vec2 "^1.3.0"

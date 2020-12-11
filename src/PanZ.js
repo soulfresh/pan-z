@@ -113,6 +113,9 @@ export default class PanZ extends Base {
 
   destroy() {
     if (this.element) {
+      // Cancel debounced functions.
+      if (this.onResize.cancel) this.onResize.cancel();
+
       // Destroy pan/zoom functionality.
       this._destroyPanZoom();
 

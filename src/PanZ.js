@@ -151,7 +151,7 @@ export default class PanZ extends Base {
 
       // TODO Verify this
       if (!this._panEnabled) this.disablePan();
-      if (!this._zoomEnabled) this.disagleZoom();
+      if (!this._zoomEnabled) this.disableZoom();
     }
   }
 
@@ -415,9 +415,12 @@ export default class PanZ extends Base {
     // x,
     // y,
     px0,
-    py0
+    py0,
+    event,
   }) {
     if (this.enabled) {
+      event.preventDefault();
+
       // this.debug(
       //   'CHANGE',
       //   'dx', dx,

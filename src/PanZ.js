@@ -143,7 +143,7 @@ export default class PanZ extends Base {
         {
           onStart: this.onGestureStart,
           onEnd: this.onGestureEnd,
-          onDoubleTap: this.onDoubleClick,
+          /*onDoubleTap: this.onDoubleClick,*/
         }
       );
 

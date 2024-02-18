@@ -64,8 +64,8 @@ export default class PanZ extends Base {
 
     this.bounds = bounds;
     this.boundingElement = boundingElement;
-    this._zoomEnabled = panEnabled;
-    this._panEnabled = zoomEnabled;
+    this._zoomEnabled = zoomEnabled;
+    this._panEnabled = panEnabled;
     this._zoomSpeed = zoomSpeed / 100;
     this.minZoom = minZoom;
     this.maxZoom = maxZoom;

@@ -956,6 +956,8 @@ export default class PanZ extends Base {
     }
   }
 
+  // TODO Also emit the underlying event in case the user
+  // needs to cancel it.
   _emitState(name) {
     const w0 = this.elementWidth;
     const h0 = this.elementHeight;
